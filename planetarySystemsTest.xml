@@ -1,0 +1,20 @@
+<object-stream>
+  <list>
+    <models.PlanetarySystem>
+      <systemName>Solar System</systemName>
+      <orbittingStarName>Sun</orbittingStarName>
+    </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>GE345</systemName>
+      <orbittingStarName>Sun12</orbittingStarName>
+    </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>Generic_234</systemName>
+      <orbittingStarName>Star123</orbittingStarName>
+    </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName></systemName>
+      <orbittingStarName></orbittingStarName>
+    </models.PlanetarySystem>
+  </list>
+</object-stream>
