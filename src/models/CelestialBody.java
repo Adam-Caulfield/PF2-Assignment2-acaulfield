@@ -7,13 +7,15 @@ public abstract class CelestialBody {
     private double mass;
     private double diameter;
     private PlanetarySystem planetarySystem;
+    private double gravity;
 
-    public CelestialBody(String name, double mass, double diameter, PlanetarySystem planetarySystem) {
+    public CelestialBody(String name, double mass, double diameter,PlanetarySystem planetarySystem) {
         this.id = nextId++;
 
         setName(name);
         setMass(mass);
         setDiameter(diameter);
+        calculateGravity(gravity);
 
         if (planetarySystem == null) {
             throw new IllegalArgumentException("Planetary System must not be null");
@@ -36,6 +38,7 @@ public abstract class CelestialBody {
     public double getDiameter() {
         return diameter;
     }
+
 
     public PlanetarySystem getPlanetarySystem() {
         return planetarySystem;
@@ -69,9 +72,24 @@ public abstract class CelestialBody {
         this.planetarySystem = planetarySystem;
     }
 
-    public abstract String displayInfo();
 
-    public abstract double calculateGravity();
+    private double calculateGravity(double gravity) {
+        if (mass > 0 && diameter > 0) {
+            gravity = mass * diameter;
+            return gravity;
+        } else {
+            gravity = 0;
+            return gravity;
+        }
+    }
+
+    public String displayInfo() {
+        return "name is: " + name +
+                "-mass is:"+ mass +
+                "diamter is:"+diameter+
+                "gravity is:"+gravity+
+                "id is:"+id;
+    }
 
     public abstract String classifyBody();
 
