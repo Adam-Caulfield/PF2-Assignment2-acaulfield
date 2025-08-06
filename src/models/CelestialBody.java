@@ -86,7 +86,7 @@ public abstract class CelestialBody {
     public String displayInfo() {
         return "name is: " + name +
                 "-mass is:"+ mass +
-                "diamter is:"+diameter+
+                "diameter is:"+diameter+
                 "gravity is:"+gravity+
                 "id is:"+id;
     }
