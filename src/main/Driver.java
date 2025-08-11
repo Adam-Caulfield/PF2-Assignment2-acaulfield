@@ -194,7 +194,7 @@ public class Driver {
         int id = ScannerInput.readNextInt("Please enter id number to delete: ");
 
         if (celestialAPI.isValidId(id)!=-1) {
-            CelestialBody t = celestialAPI.deleteCelestialId(id);
+            String t = celestialAPI.deleteCelestialId(id);
             if (t != null)
                 System.out.println("Sucessful delete : " + t);
             else System.out.println("No Celestial Object was deleted");

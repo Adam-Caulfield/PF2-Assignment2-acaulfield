@@ -13,6 +13,8 @@ public abstract class Planet extends CelestialBody {
   this.hasLiquidWater = hasLiquidWater;
  }
 
+
+
  public String getSurfaceType() {
   return surfaceType;
  }

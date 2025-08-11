@@ -62,4 +62,5 @@ public class GasPlanet extends Planet {
     public String classifyBody() {
         return "Gas planet";
     }
+
 }

@@ -93,4 +93,7 @@ public abstract class CelestialBody {
 
     public abstract String classifyBody();
 
+    public double getWeight() {
+        return mass;
+    }
 }
