@@ -12,8 +12,8 @@ public class PlanetarySystem {
 
 
     public PlanetarySystem(String systemName, String orbittingStarName) {
-        this.systemName = Utilities.truncateString(systemName, 50);;
-        this.orbittingStarName = Utilities.truncateString(orbittingStarName, 30);;
+        this.systemName = Utilities.truncateString(systemName, 50);
+        this.orbittingStarName = Utilities.truncateString(orbittingStarName, 30);
     }
 
     public String getSystemName() {
