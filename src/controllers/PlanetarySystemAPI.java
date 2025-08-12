@@ -17,7 +17,7 @@ import static utils.Utilities.isValidIndex;
 //todo include PlanetarySystem API into starter code
 public class PlanetarySystemAPI implements ISerializer {
 
-    private List<PlanetarySystem> planetarySystemList = new ArrayList<>();
+    private static List<PlanetarySystem> planetarySystemList = new ArrayList<>();
 
     private File file;
 
@@ -56,7 +56,7 @@ public class PlanetarySystemAPI implements ISerializer {
     }
 
 
-    public String listPlanetarySystems(){
+    public static String listPlanetarySystems(){
         String listPlanetarySystems = "";
         for (PlanetarySystem planetarySystem : planetarySystemList){
             listPlanetarySystems += planetarySystemList.indexOf(planetarySystem) + ": " + planetarySystem + "\n";

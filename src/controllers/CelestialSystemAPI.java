@@ -2,12 +2,16 @@ package controllers;
 
 import models.*;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CelestialSystemAPI {
     private ArrayList<Star> stars = new ArrayList<>();
     private ArrayList<IcePlanet> icePlanets = new ArrayList<>();
     private ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
+
+    public CelestialSystemAPI(File file) {
+    }
 
     public boolean topFiveHighestRadiationGasPlanet() {
         for (int i = gasPlanets.size() - 1; i >= 0; i--) {
@@ -69,17 +73,23 @@ public class CelestialSystemAPI {
         this.stars = stars;
     }
 
-    public void addCelestialObject(GasPlanet planet) {
-        gasPlanets.add(planet);
+    public void addCelestialObject(CelestialBody obj) {
+        if (obj instanceof Star) {
+            stars.add((Star) obj);
+        }
+        else if (obj instanceof GasPlanet) {
+            gasPlanets.add((GasPlanet) obj);
+        }
+        else if (obj instanceof IcePlanet) {
+            icePlanets.add((IcePlanet) obj);
+        }
+        else {
+            throw new IllegalArgumentException(
+                    "Unsupported celestial type: " + obj.getClass().getSimpleName()
+            );
+        }
     }
 
-    public void addCelestialObject(IcePlanet planet) {
-        icePlanets.add(planet);
-    }
-
-    public void addCelestialObject(Star star) {
-        stars.add(star);
-    }
 
     public int isValidId(int id) {
         if (id < 0) {

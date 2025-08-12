@@ -5,6 +5,7 @@ public abstract class Planet extends CelestialBody {
  private String surfaceType;
  private double averageTemperature;
  private boolean hasLiquidWater;
+ private String name;
 
  public Planet(String name, double mass, double diameter, PlanetarySystem planetarySystem, double averageTemperature, String surfaceType, boolean hasLiquidWater) {
   super(name, mass, diameter, planetarySystem);//super allows all subclasses of a class to implement a particular method as part of its code
@@ -26,6 +27,17 @@ public abstract class Planet extends CelestialBody {
    this.surfaceType = surfaceType;
   }
  }
+
+
+ public void setName(String name) {
+  if (name != null && !name.isBlank()) {
+   this.name = name.length() > 30 ? name.substring(0, 30) : name;
+  } else {
+   this.name = "Unnamed";
+  }
+ }
+
+
 
  public double getAverageTemperature() {
   return averageTemperature;

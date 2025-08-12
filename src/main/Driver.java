@@ -23,7 +23,7 @@ public class Driver {
 
     public void start() {
 
-       // celestialAPI = new CelestialSystemAPI(new File("celestialSystems.xml"));
+        celestialAPI = new CelestialSystemAPI(new File("celestialSystems.xml"));
         planetarySystemAPI = new PlanetarySystemAPI(new File("planetarySystems.xml"));
 
         loadAllData();  //load all data once the serializers are set up
@@ -192,7 +192,7 @@ public class Driver {
 
     private void deleteCelestial() {
         int id = ScannerInput.readNextInt("Please enter id number to delete: ");
-
+        System.out.println(celestialAPI.listAllCelestialBodies());
         if (celestialAPI.isValidId(id)!=-1) {
             String t = celestialAPI.deleteCelestialId(id);
             if (t != null)
@@ -201,55 +201,67 @@ public class Driver {
         }
 
     }
+    private boolean askYesNo(String prompt) {
+        while (true) {
+            String input = ScannerInput.readNextLine(prompt + " (Y/N): ").trim().toUpperCase();
+            if (input.equals("Y")) return true;
+            if (input.equals("N")) return false;
+            System.out.println("Invalid input, please enter Y or N.");
+        }
+    }
 
-    // public Vehicle(String regNumber, String  model, float cost, Planetary planetary systems, int  year) {
     private void addCelestial() {
         int celestialType = ScannerInput.readNextInt("""
-                Which type of celestial object do you wish to add? 
-                1) Star
-                2) Gas Planet
-                3) Ice Planet """);
+        Which type of celestial object do you wish to add? 
+        1) Star
+        2) Gas Planet
+        3) Ice Planet
+        ==>> """);
 
-        String name = ""; //max 30 chars
-        double mass = 0.1; //measured in ronnagrams earth is approx 6.0rg must be > 0.1 default to 0.1
-        double diameter = 0.5;  // measured in kilometres must be > 0.5 default to 0.5
-        PlanetarySystem planetarySystem = null;
+        String systemName = ScannerInput.readNextLine("Enter the name of the planetary system to add this celestial object to: ");
+        PlanetarySystemAPI.listPlanetarySystems();
+        PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByName(systemName);
+
+        if (planetarySystem == null) {
+            System.out.println("Planetary system does not exist. Cannot add celestial object.");
+            return;
+        }
+
+        String name = ScannerInput.readNextLine("Enter name of celestial object (max 30 chars): ");
+        double mass = ScannerInput.readNextDouble("Enter mass (in ronnagrams, > 0.1, default 0.1): ");
+        if (mass < 0.1) mass = 0.1;
+
+        double diameter = ScannerInput.readNextDouble("Enter diameter (in km, > 0.5, default 0.5): ");
+        if (diameter < 0.5) diameter = 0.5;
 
         switch (celestialType) {
-            case 2, 3 -> { //planet
-                double averageTemperature = 0;// Average surface temperature in °C must be a value between -400 and 400 default 0
-                String surfaceType = "";
-                boolean hasLiquidWater = false;
-                switch (celestialType) {
-                    case 2 -> {
-                        //gas
-                        String gasComposition = ""; //max 20 chars
-                        boolean hasStorms = true; //default true
-                        double windSpeed = 1;// () → Max wind speed in km/h min 1 max 200 default 1
-                        String coreComposition = "";// () → "rocky core", "metallic hydrogen core" max 40 chars
-                        double radiationLevel = 0;
-
-                        celestialAPI.addCelestialObject(new GasPlanet(name, mass, diameter, planetarySystem, averageTemperature, surfaceType, hasLiquidWater, gasComposition, coreComposition, radiationLevel));
-                    }
-                    case 3 -> {
-                        //ice
-                        String iceComposition = "";  //max 30 char
-                        celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter, planetarySystem,
-                                averageTemperature, surfaceType, hasLiquidWater, iceComposition));
-
-                    }
-
-                }
-            }
             case 1 -> {
-                //star
-
-                char spectralType = 'M'; //must be one of OBAFGKM  default to M
-                double luminosity = 0;
+                char spectralType = ScannerInput.readNextChar("Enter spectral type (O, B, A, F, G, K, M): ");
+                double luminosity = ScannerInput.readNextDouble("Enter luminosity: ");
                 celestialAPI.addCelestialObject(new Star(name, mass, diameter, planetarySystem, spectralType, luminosity));
-
+                System.out.println("Star added successfully.");
             }
-            default -> throw new IllegalStateException("Unexpected value: " + celestialType);
+            case 2 -> {
+                double avgTemp = ScannerInput.readNextDouble("Enter average surface temperature (°C, between -400 and 400): ");
+                String surfaceType = ScannerInput.readNextLine("Enter surface type: ");
+                boolean hasLiquidWater = askYesNo("Does it have liquid water?");
+                String gasComposition = ScannerInput.readNextLine("Enter gas composition (max 20 chars): ");
+                String coreComposition = ScannerInput.readNextLine("Enter core composition (max 40 chars): ");
+                double radiationLevel = ScannerInput.readNextDouble("Enter radiation level: ");
+                celestialAPI.addCelestialObject(new GasPlanet(name, mass, diameter, planetarySystem, avgTemp, surfaceType,
+                        hasLiquidWater, gasComposition, coreComposition, radiationLevel));
+                System.out.println("Gas Planet added successfully.");
+            }
+            case 3 -> {
+                double avgTemp = ScannerInput.readNextDouble("Enter average surface temperature (°C, between -400 and 400): ");
+                String surfaceType = ScannerInput.readNextLine("Enter surface type: ");
+                boolean hasLiquidWater = askYesNo("Does it have liquid water?");
+                String iceComposition = ScannerInput.readNextLine("Enter ice composition (max 30 chars): ");
+                celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter, planetarySystem, avgTemp,
+                        surfaceType, hasLiquidWater, iceComposition));
+                System.out.println("Ice Planet added successfully.");
+            }
+            default -> System.out.println("Invalid celestial object type selected.");
         }
     }
 
