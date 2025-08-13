@@ -241,6 +241,7 @@ public class Driver {
                 double luminosity = ScannerInput.readNextDouble("Enter luminosity: ");
                 celestialAPI.addCelestialObject(new Star(name, mass, diameter, planetarySystem, spectralType, luminosity));
                 System.out.println("Star added successfully.");
+                System.out.println(getValidId());
             }
             case 2 -> {
                 double avgTemp = ScannerInput.readNextDouble("Enter average surface temperature (°C, between -400 and 400): ");

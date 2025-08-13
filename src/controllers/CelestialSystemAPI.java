@@ -1,8 +1,10 @@
 package controllers;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import models.*;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 public class CelestialSystemAPI {
@@ -269,11 +271,29 @@ public class CelestialSystemAPI {
         return false;
     }
 
-    public void load() {
+    public void load() throws Exception {
+        XStream xstream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xstream);
+        xstream.allowTypes(new Class[] { ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class });
+        ObjectInputStream is = xstream.createObjectInputStream(new FileReader("CelestialObjects.xml"));
+        for (CelestialBody obj : allCelestialBodies) {
+            if (obj instanceof Star) stars.add((Star) obj);
+            else if (obj instanceof GasPlanet) gasPlanets.add((GasPlanet) obj);
+            else if (obj instanceof IcePlanet) icePlanets.add((IcePlanet) obj);
+        }
+        is.close();
     }
 
-    public void save() {
+    public void save() throws Exception {
+        XStream xstream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xstream);
+        xstream.allowTypes(new Class[] { ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class });
+        ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("CelestialObjects.xml"));
+        out.writeObject(allCelestialBodies);
+        out.close();
     }
+
+
 
     public String listAllCelestialBodies() {
         if (allCelestialBodies.isEmpty()) return "No Celestial Bodies";
