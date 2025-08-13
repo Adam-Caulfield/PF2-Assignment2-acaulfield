@@ -143,9 +143,6 @@ public class PlanetarySystemAPI implements ISerializer {
     }
 
 
-    //---------------------
-    // Persistence Methods
-    //---------------------
 
     @Override
     public String fileName() {

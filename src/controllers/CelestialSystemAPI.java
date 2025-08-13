@@ -6,10 +6,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class CelestialSystemAPI {
+    private ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
     private ArrayList<Star> stars = new ArrayList<>();
     private ArrayList<IcePlanet> icePlanets = new ArrayList<>();
     private ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
-
     public CelestialSystemAPI(File file) {
     }
 
@@ -74,22 +74,147 @@ public class CelestialSystemAPI {
     }
 
     public void addCelestialObject(CelestialBody obj) {
-        if (obj instanceof Star) {
-            stars.add((Star) obj);
-        }
-        else if (obj instanceof GasPlanet) {
-            gasPlanets.add((GasPlanet) obj);
-        }
-        else if (obj instanceof IcePlanet) {
-            icePlanets.add((IcePlanet) obj);
-        }
-        else {
-            throw new IllegalArgumentException(
-                    "Unsupported celestial type: " + obj.getClass().getSimpleName()
-            );
-        }
+        if (obj instanceof Star) stars.add((Star) obj);
+        else if (obj instanceof GasPlanet) gasPlanets.add((GasPlanet) obj);
+        else if (obj instanceof IcePlanet) icePlanets.add((IcePlanet) obj);
+        else throw new IllegalArgumentException("Unsupported celestial type: " + obj.getClass().getSimpleName());
+        allCelestialBodies.add(obj);
     }
 
+    public boolean addStar(Star star) {
+        if (star == null) return false;
+        stars.add(star);
+        allCelestialBodies.add(star);
+        return true;
+    }
+
+    public boolean addGasPlanet(GasPlanet planet) {
+        if (planet == null) return false;
+        gasPlanets.add(planet);
+        allCelestialBodies.add(planet);
+        return true;
+    }
+
+    public boolean addIcePlanet(IcePlanet planet) {
+        if (planet == null) return false;
+        icePlanets.add(planet);
+        allCelestialBodies.add(planet);
+        return true;
+    }
+
+    public Star getStarByIndex(int index) {
+        if (index >= 0 && index < stars.size()) return stars.get(index);
+        return null;
+    }
+
+    public GasPlanet getGasPlanetByIndex(int index) {
+        if (index >= 0 && index < gasPlanets.size()) return gasPlanets.get(index);
+        return null;
+    }
+
+    public IcePlanet getIcePlanetByIndex(int index) {
+        if (index >= 0 && index < icePlanets.size()) return icePlanets.get(index);
+        return null;
+    }
+
+    public Star getStarByName(String name) {
+        for (Star s : stars) if (s.getName().equalsIgnoreCase(name)) return s;
+        return null;
+    }
+
+    public GasPlanet getGasPlanetByName(String name) {
+        for (GasPlanet g : gasPlanets) if (g.getName().equalsIgnoreCase(name)) return g;
+        return null;
+    }
+
+    public IcePlanet getIcePlanetByName(String name) {
+        for (IcePlanet i : icePlanets) if (i.getName().equalsIgnoreCase(name)) return i;
+        return null;
+    }
+
+    public boolean updateStar(String oldName, Star updatedStar) {
+        for (int i = 0; i < stars.size(); i++) {
+            if (stars.get(i).getName().equalsIgnoreCase(oldName)) {
+                stars.set(i, updatedStar);
+                allCelestialBodies.set(allCelestialBodies.indexOf(stars.get(i)), updatedStar);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateGasPlanet(String oldName, GasPlanet updatedPlanet) {
+        for (int i = 0; i < gasPlanets.size(); i++) {
+            if (gasPlanets.get(i).getName().equalsIgnoreCase(oldName)) {
+                gasPlanets.set(i, updatedPlanet);
+                allCelestialBodies.set(allCelestialBodies.indexOf(gasPlanets.get(i)), updatedPlanet);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateIcePlanet(String oldName, IcePlanet updatedPlanet) {
+        for (int i = 0; i < icePlanets.size(); i++) {
+            if (icePlanets.get(i).getName().equalsIgnoreCase(oldName)) {
+                icePlanets.set(i, updatedPlanet);
+                allCelestialBodies.set(allCelestialBodies.indexOf(icePlanets.get(i)), updatedPlanet);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeStarByName(String name) {
+        for (Star s : stars) if (s.getName().equalsIgnoreCase(name)) {
+            allCelestialBodies.remove(s);
+            return stars.remove(s);
+        }
+        return false;
+    }
+
+    public boolean removeGasPlanetByName(String name) {
+        for (GasPlanet g : gasPlanets) if (g.getName().equalsIgnoreCase(name)) {
+            allCelestialBodies.remove(g);
+            return gasPlanets.remove(g);
+        }
+        return false;
+    }
+
+    public boolean removeIcePlanetByName(String name) {
+        for (IcePlanet i : icePlanets) if (i.getName().equalsIgnoreCase(name)) {
+            allCelestialBodies.remove(i);
+            return icePlanets.remove(i);
+        }
+        return false;
+    }
+
+    public boolean removeStarByIndex(int index) {
+        if (index >= 0 && index < stars.size()) {
+            allCelestialBodies.remove(stars.get(index));
+            stars.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeGasPlanetByIndex(int index) {
+        if (index >= 0 && index < gasPlanets.size()) {
+            allCelestialBodies.remove(gasPlanets.get(index));
+            gasPlanets.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeIcePlanetByIndex(int index) {
+        if (index >= 0 && index < icePlanets.size()) {
+            allCelestialBodies.remove(icePlanets.get(index));
+            icePlanets.remove(index);
+            return true;
+        }
+        return false;
+    }
 
     public int isValidId(int id) {
         if (id < 0) {
@@ -125,36 +250,18 @@ public class CelestialSystemAPI {
     public String listAllStarsForSpectralType(char type) {
         String result = "";
         for (int i = 0; i < stars.size(); i++) {
-            if (stars.get(i).getSpectralType() == type) {
-                result += i + ": " + stars.get(i) + "\n";
-            }
+            if (stars.get(i).getSpectralType() == type) result += i + ": " + stars.get(i) + "\n";
         }
-        return result.isEmpty() ? "No Stars with spectral type " + type : result; // the ? acts as if else
+        return result.isEmpty() ? "No Stars with spectral type " + type : result;
     }
 
     public boolean listAllCelestialObjectsSmallerThan(double diam) {
-        for (Star star : stars) {
-            if (star.getDiameter() < diam) return true;
-        }
-        for (IcePlanet ice : icePlanets) {
-            if (ice.getDiameter() < diam) return true;
-        }
-        for (GasPlanet gas : gasPlanets) {
-            if (gas.getDiameter() < diam) return true;
-        }
+        for (CelestialBody obj : allCelestialBodies) if (obj.getDiameter() < diam) return true;
         return false;
     }
 
     public boolean listAllCelestialObjectsHeavierThan(double w) {
-        for (Star star : stars) {
-            if (star.getWeight() > w) return true;
-        }
-        for (IcePlanet ice : icePlanets) {
-            if (ice.getWeight() > w) return true;
-        }
-        for (GasPlanet gas : gasPlanets) {
-            if (gas.getWeight() > w) return true;
-        }
+        for (CelestialBody obj : allCelestialBodies) if (obj.getWeight() > w) return true;
         return false;
     }
 
@@ -168,7 +275,10 @@ public class CelestialSystemAPI {
     public void save() {
     }
 
-    public boolean listAllCelestialBodies() {
-        return false;
+    public String listAllCelestialBodies() {
+        if (allCelestialBodies.isEmpty()) return "No Celestial Bodies";
+        String result = "";
+        for (int i = 0; i < allCelestialBodies.size(); i++) result += i + ": " + allCelestialBodies.get(i) + "\n";
+        return result;
     }
 }

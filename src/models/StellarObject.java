@@ -48,8 +48,7 @@ public abstract class StellarObject extends CelestialBody {
     private boolean isValidStellartype(char type) {
         return SpectralTypeUtility.isValidSpectralType(type);
     }
-    // return the String with the field information
-   // e.g. Spectral Type: M - Luminosity: 1500;
+
     @Override
     public String displayInfo() {
         return "Spectral Type is: " + spectralType + " - Luminosity is: " + luminosity + ";";
