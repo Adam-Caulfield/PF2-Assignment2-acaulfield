@@ -8,23 +8,35 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class CelestialSystemAPI {
-    public ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
-    private ArrayList<Star> stars = new ArrayList<>();
-    private ArrayList<IcePlanet> icePlanets = new ArrayList<>();
-    private ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
+    public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
+    private static ArrayList<Star> stars = new ArrayList<>();
+    private static ArrayList<IcePlanet> icePlanets = new ArrayList<>();
+    private static ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
 
     public CelestialSystemAPI(File file) {
     }
-    private int getValidId() {
+
+    public static int getValidId() {
+        int id = allCelestialBodies.size() + 1;  // start from size + 1
 
 
-            if (celestialAPI.isValidId(id)!=1) {
+        if (idExists(id)) {
+            id++;
+        }
         return id;
-    } else {
-        System.err.println("\tId already exists / is not valid.");
-        return -1;
     }
-}
+
+    private static boolean idExists(int id) {
+        for (CelestialBody body : allCelestialBodies) {
+            if (body.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     public boolean topFiveHighestRadiationGasPlanet() {
         for (int i = gasPlanets.size() - 1; i >= 0; i--) {
             int highestIndex = 0;
@@ -93,26 +105,28 @@ public class CelestialSystemAPI {
         allCelestialBodies.add(obj);
     }
 
-    public boolean addStar(Star star) {
+    public static boolean addStar(Star star) {
         if (star == null) return false;
         stars.add(star);
         allCelestialBodies.add(star);
         return true;
     }
 
-    public boolean addGasPlanet(GasPlanet planet) {
+    public static boolean addGasPlannet(GasPlanet planet) {
         if (planet == null) return false;
         gasPlanets.add(planet);
         allCelestialBodies.add(planet);
         return true;
     }
 
-    public boolean addIcePlanet(IcePlanet planet) {
+    public static boolean addIcePlanet(IcePlanet planet) {
         if (planet == null) return false;
         icePlanets.add(planet);
         allCelestialBodies.add(planet);
         return true;
     }
+
+
 
     public Star getStarByIndex(int index) {
         if (index >= 0 && index < stars.size()) return stars.get(index);
