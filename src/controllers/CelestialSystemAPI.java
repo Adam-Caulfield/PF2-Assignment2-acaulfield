@@ -8,13 +8,23 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class CelestialSystemAPI {
-    private ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
+    public ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
     private ArrayList<Star> stars = new ArrayList<>();
     private ArrayList<IcePlanet> icePlanets = new ArrayList<>();
     private ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
+
     public CelestialSystemAPI(File file) {
     }
+    private int getValidId() {
 
+
+            if (celestialAPI.isValidId(id)!=1) {
+        return id;
+    } else {
+        System.err.println("\tId already exists / is not valid.");
+        return -1;
+    }
+}
     public boolean topFiveHighestRadiationGasPlanet() {
         for (int i = gasPlanets.size() - 1; i >= 0; i--) {
             int highestIndex = 0;
@@ -168,26 +178,29 @@ public class CelestialSystemAPI {
     }
 
     public boolean removeStarByName(String name) {
-        for (Star s : stars) if (s.getName().equalsIgnoreCase(name)) {
-            allCelestialBodies.remove(s);
-            return stars.remove(s);
-        }
+        for (Star s : stars)
+            if (s.getName().equalsIgnoreCase(name)) {
+                allCelestialBodies.remove(s);
+                return stars.remove(s);
+            }
         return false;
     }
 
     public boolean removeGasPlanetByName(String name) {
-        for (GasPlanet g : gasPlanets) if (g.getName().equalsIgnoreCase(name)) {
-            allCelestialBodies.remove(g);
-            return gasPlanets.remove(g);
-        }
+        for (GasPlanet g : gasPlanets)
+            if (g.getName().equalsIgnoreCase(name)) {
+                allCelestialBodies.remove(g);
+                return gasPlanets.remove(g);
+            }
         return false;
     }
 
     public boolean removeIcePlanetByName(String name) {
-        for (IcePlanet i : icePlanets) if (i.getName().equalsIgnoreCase(name)) {
-            allCelestialBodies.remove(i);
-            return icePlanets.remove(i);
-        }
+        for (IcePlanet i : icePlanets)
+            if (i.getName().equalsIgnoreCase(name)) {
+                allCelestialBodies.remove(i);
+                return icePlanets.remove(i);
+            }
         return false;
     }
 
@@ -267,14 +280,19 @@ public class CelestialSystemAPI {
         return false;
     }
 
-    public boolean listAllCelestialObjectsForGivenPlanetary(PlanetarySystem m) {
-        return false;
+    public String listAllCelestialObjectsForGivenPlanetary(PlanetarySystem m) {
+        if (allCelestialBodies.isEmpty()) return "No Celestial Bodies";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < allCelestialBodies.size(); i++) {
+            sb.append(i).append(": ").append(allCelestialBodies.get(i)).append("\n");
+        }
+        return sb.toString();
     }
 
     public void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         XStream.setupDefaultSecurity(xstream);
-        xstream.allowTypes(new Class[] { ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class });
+        xstream.allowTypes(new Class[]{ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class});
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("CelestialObjects.xml"));
         for (CelestialBody obj : allCelestialBodies) {
             if (obj instanceof Star) stars.add((Star) obj);
@@ -287,12 +305,11 @@ public class CelestialSystemAPI {
     public void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         XStream.setupDefaultSecurity(xstream);
-        xstream.allowTypes(new Class[] { ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class });
+        xstream.allowTypes(new Class[]{ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class});
         ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("CelestialObjects.xml"));
         out.writeObject(allCelestialBodies);
         out.close();
     }
-
 
 
     public String listAllCelestialBodies() {
@@ -300,5 +317,57 @@ public class CelestialSystemAPI {
         String result = "";
         for (int i = 0; i < allCelestialBodies.size(); i++) result += i + ": " + allCelestialBodies.get(i) + "\n";
         return result;
+    }
+
+    public void sortByMassDescending() {
+        for (int i = allCelestialBodies.size() - 1; i >= 0; i--) {
+            int highestIndex = 0;
+            for (int j = 0; j <= i; j++) {
+                if (allCelestialBodies.get(j).getWeight() > allCelestialBodies.get(highestIndex).getWeight()) {
+                    highestIndex = j;
+                }
+            }
+            swapProducts(allCelestialBodies, i, highestIndex);
+        }
+    }
+
+    private void swapProducts(ArrayList<CelestialBody> list, int i, int j) {
+        CelestialBody temp = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, temp);
+    }
+
+    public void sortByDiameterAscending() {
+        for (int i = allCelestialBodies.size() - 1; i >= 0; i--) {
+            int smallestIndex = 0;
+            for (int j = 0; j <= i; j++) {
+                if (allCelestialBodies.get(j).getDiameter() < allCelestialBodies.get(smallestIndex).getDiameter()) {
+                    smallestIndex = j;
+                }
+            }
+            swapProducts(allCelestialBodies, i, smallestIndex);
+        }
+    }
+
+    public boolean updateCelestialObject(int id, String newName, double newMass, double newDiameter) {
+
+
+        CelestialBody obj = allCelestialBodies.get(id);
+        obj.setName(newName);
+        obj.setMass(newMass);
+        obj.setDiameter(newDiameter);
+
+        if (obj instanceof Star) {
+            int index = stars.indexOf(obj);
+            if (index >= 0) stars.set(index, (Star) obj);
+        } else if (obj instanceof GasPlanet) {
+            int index = gasPlanets.indexOf(obj);
+            if (index >= 0) gasPlanets.set(index, (GasPlanet) obj);
+        } else if (obj instanceof IcePlanet) {
+            int index = icePlanets.indexOf(obj);
+            if (index >= 0) icePlanets.set(index, (IcePlanet) obj);
+        }
+
+        return true;
     }
 }

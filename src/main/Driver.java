@@ -26,7 +26,7 @@ public class Driver {
         celestialAPI = new CelestialSystemAPI(new File("celestialSystems.xml"));
         planetarySystemAPI = new PlanetarySystemAPI(new File("planetarySystems.xml"));
 
-        loadAllData();  //load all data once the serializers are set up
+     //   loadAllData();  //load data on start
         runMainMenu();
     }
 
@@ -59,7 +59,9 @@ public class Driver {
                 case 1 -> runPlanetaryMenu();
                 case 2 -> runCelestialAPIMenu();
                 case 3 -> runReportsMenu();
-                case 4 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
+                case 4 -> System.out.println(PlanetarySystemAPI.listPlanetarySystems());
+                case 5 -> System.out.println(planetarySystemAPI.searchObjects());
+                case 6 -> sortCelestialObjects();
                 case 10 -> saveAllData();
                 case 11 -> loadAllData();
                 default -> System.out.println("Invalid option entered" + option);
@@ -68,6 +70,29 @@ public class Driver {
             option = mainMenu();
         }
         exitApp();
+    }
+
+
+
+
+    private void sortCelestialObjects() {
+        System.out.println("""
+            Sort celestial objects by:
+            1) Mass (Descending)
+            2) Diameter (Ascending)
+        """);
+        int choice = ScannerInput.readNextInt("Enter choice: ");
+        switch (choice) {
+            case 1 -> {
+                celestialAPI.sortByMassDescending();
+                System.out.println(celestialAPI.listAllCelestialBodies());
+            }
+            case 2 -> {
+                celestialAPI.sortByDiameterAscending();
+                System.out.println(celestialAPI.listAllCelestialBodies());
+            }
+            default -> System.out.println("Invalid sort option.");
+        }
     }
 
     private void exitApp() {
@@ -180,10 +205,17 @@ public class Driver {
         int option = celestialAPIMenu();
         while (option != 0) {
             switch (option) {
-                case 1 -> addCelestial();
+                case 1 -> {
+                    System.out.println(planetarySystemAPI.listPlanetarySystems());
+
+                    addCelestial();
+                }
                 case 2 -> deleteCelestial();
                 case 3 -> System.out.println(celestialAPI.listAllCelestialBodies());
-                case 4 -> System.out.println("todo");
+                case 4 -> {
+                    System.out.println("which would you like to update");
+                    updateCelestial();
+                }
                 default -> System.out.println("Invalid option entered" + option);
             }
             ScannerInput.readNextLine("\n Press the enter key to continue");
@@ -191,17 +223,55 @@ public class Driver {
         }
     }
 
+    private void updateCelestial() {
+        listCelestialId();
+        int id = ScannerInput.readNextInt("Enter the ID of the celestial object to update: ");
+        if (celestialAPI.isValidId(id) != -1) {
+            String newName = ScannerInput.readNextLine("Enter new name (leave blank to keep unchanged): ");
+            double newMass = ScannerInput.readNextDouble("Enter new mass (>0.1, enter -1 to keep unchanged): ");
+            double newDiameter = ScannerInput.readNextDouble("Enter new diameter (>0.5, enter -1 to keep unchanged): ");
+
+            boolean updated = celestialAPI.updateCelestialObject(id, newName, newMass, newDiameter);
+            if (updated) {
+                System.out.println("Update successful.");
+            } else {
+                System.out.println("Update failed.");
+            }
+        } else {
+            System.out.println("Invalid ID entered.");
+        }
+    }
+
     private void deleteCelestial() {
+        listCelestialId();
         int id = ScannerInput.readNextInt("Please enter id number to delete: ");
-        System.out.println(celestialAPI.listAllCelestialBodies());
-        if (celestialAPI.isValidId(id)!=-1) {
-            String t = celestialAPI.deleteCelestialId(id);
-            if (t != null)
-                System.out.println("Sucessful delete : " + t);
-            else System.out.println("No Celestial Object was deleted");
+        if (celestialAPI.isValidId(id) != -1) {
+            String deleted = celestialAPI.deleteCelestialId(id);
+            if (deleted != null) {
+                System.out.println("Successful delete: " + deleted);
+            } else {
+                System.out.println("No Celestial Object was deleted.");
+            }
+        } else {
+            System.out.println("Invalid ID entered.");
+        }
+    }
+
+   private void listCelestialId() {
+        if (celestialAPI.allCelestialBodies.isEmpty()) {
+            System.out.println("No celestial objects found.");
+            return;
         }
 
+        for (int i = 0; i < celestialAPI.allCelestialBodies.size(); i++) {
+            System.out.println("ID: " + i);
+            celestialAPI.allCelestialBodies.get(i).displayInfo();
+            System.out.println();
+        }
     }
+
+
+
     private boolean askYesNo(String prompt) {
         while (true) {
             String input = ScannerInput.readNextLine(prompt + " (Y/N): ").trim().toUpperCase();
@@ -345,7 +415,7 @@ public class Driver {
             switch (option) {
                 case 1 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
                 case 2 -> listAllCelestialFromaGivenPlanetary();
-                case 3 -> System.out.println("todo");
+                case 3 ->  planetarySystemAPI.listPlanetarySystems();
                 default -> System.out.println("Invalid option entered" + option);
             }
             ScannerInput.readNextLine("\n Press the enter key to continue");

@@ -25,6 +25,11 @@ public class PlanetarySystemAPI implements ISerializer {
         this.file = file;
     }
 
+    public static boolean listAllPlaneterySystems() {
+        return planetarySystemList.isEmpty();
+    }
+
+
     //---------------------
     // Create methods
     //---------------------
@@ -63,6 +68,7 @@ public class PlanetarySystemAPI implements ISerializer {
         }
         if (listPlanetarySystems.equals("")){
             return "No Planetary Systems";
+
         }
         else {
             return listPlanetarySystems;
@@ -174,4 +180,15 @@ public class PlanetarySystemAPI implements ISerializer {
 
 
 
+
+    public String searchObjects() {
+        if (planetarySystemList.isEmpty()) {
+            return "No Planetary Systems";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < planetarySystemList.size(); i++) {
+            sb.append(i).append(": ").append(planetarySystemList.get(i)).append("\n");
+        }
+        return sb.toString();
+    }
 }

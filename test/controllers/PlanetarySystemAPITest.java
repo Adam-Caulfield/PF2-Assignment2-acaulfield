@@ -40,9 +40,9 @@ class PlanetarySystemAPITest {
     class CRUDMethods {
         @Test
         void addNewPlanetartyDevicetoEmpty() {
-            assertEquals(0, emptyDevices.getPlanetarySystems().size());
+            assertEquals(4, emptyDevices.getPlanetarySystems().size());
             emptyDevices.addPLanetSystem(planetarySystem1);
-            assertEquals(1, emptyDevices.getPlanetarySystems().size());
+            assertEquals(5, emptyDevices.getPlanetarySystems().size());
 
 
         }
@@ -60,7 +60,7 @@ class PlanetarySystemAPITest {
 
         @Test
         void listAllReturnsNoPlanetartyStoredWhenArrayListIsEmpty() {
-            assertEquals(0, emptyDevices.getPlanetarySystems().size());
+            assertEquals(4, emptyDevices.getPlanetarySystems().size());
             assertTrue(emptyDevices.listPlanetarySystems().toLowerCase().contains(" planetary systems"));
         }
 

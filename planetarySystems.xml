@@ -1,8 +1,8 @@
 <object-stream>
   <list>
     <models.PlanetarySystem>
-      <systemName>test</systemName>
-      <orbittingStarName>q</orbittingStarName>
+      <systemName>newsave</systemName>
+      <orbittingStarName>1</orbittingStarName>
     </models.PlanetarySystem>
   </list>
 </object-stream>
