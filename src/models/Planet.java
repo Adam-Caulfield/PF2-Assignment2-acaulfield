@@ -5,10 +5,10 @@ public abstract class Planet extends CelestialBody {
  private String surfaceType;
  private double averageTemperature;
  private boolean hasLiquidWater;
- private String name;
+// private String name;
 
- public Planet(String name, double mass, double diameter, PlanetarySystem planetarySystem, double averageTemperature, String surfaceType, boolean hasLiquidWater) {
-  super(name, mass, diameter, planetarySystem);//super allows all subclasses of a class to implement a particular method as part of its code
+ public Planet(String name, double mass, double diameter,String energySource, PlanetarySystem planetarySystem, double averageTemperature, String surfaceType, boolean hasLiquidWater) {
+  super(name, mass, diameter,energySource, planetarySystem);//super allows all subclasses of a class to implement a particular method as part of its code
   setAverageTemperature(averageTemperature);
   setSurfaceType(surfaceType);
   this.hasLiquidWater = hasLiquidWater;
@@ -29,13 +29,7 @@ public abstract class Planet extends CelestialBody {
  }
 
 
- public void setName(String name) {
-  if (name != null && !name.isBlank()) {
-   this.name = name.length() > 30 ? name.substring(0, 30) : name;
-  } else {
-   this.name = "Unnamed";
-  }
- }
+
 
 
 
@@ -64,4 +58,16 @@ public abstract class Planet extends CelestialBody {
   return (getMass() * 6.67430e-11) / (radius * radius);
  }
 
+ public String toString() {
+  return "Plannet Details:\n" +
+          "Name: " + getName() + "\n" +
+          "Mass: " + getMass() + "\n" +
+          "Diameter: " + getDiameter() + "\n" +
+          "Gravity: " + calculateGravity() + "\n" +
+          "has water: " + hasLiquidWater() + "\n" +
+          "Surface Type: " + getSurfaceType() + "\n" +
+          "Average Temperature: " + getAverageTemperature() + "\n" +
+          "Energy Source: " + getEnergySource() + "\n" +
+          "Planetary System: " + getPlanetarySystem().getSystemName();
+ }
 }

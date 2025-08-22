@@ -2,8 +2,10 @@ package models;
 
 public class Star extends StellarObject {
     private double gravity;
-    public Star(String name, double mass, double diameter, PlanetarySystem planetarySystem, char type, double luminosity) {
-        super(name, mass, diameter, planetarySystem, type, luminosity);
+
+    public Star(String name, double mass, double diameter, String energySource,
+                PlanetarySystem planetarySystem, char type, double luminosity) {
+        super(name, mass, diameter, energySource, planetarySystem, type, luminosity);
     }
 
     @Override
@@ -18,11 +20,20 @@ public class Star extends StellarObject {
 
     public double calculateGravity() {
         double radius = getDiameter() / 2.0;
-        gravity =  (getMass() * 6.67430e-11) / (radius * radius);
+        gravity = (getMass() * 6.67430e-11) / (radius * radius);
         return gravity;
     }
+
+    @Override
     public String toString() {
-        return "Star: " + getName()+
-                "gravity"+ gravity;
+        return "Star Details:\n" +
+                "Name: " + getName() + "\n" +
+                "Mass: " + getMass() + "\n" +
+                "Diameter: " + getDiameter() + "\n" +
+                "Gravity: " + calculateGravity() + "\n" +
+                "Spectral Type: " + getSpectralType() + "\n" +
+                "Luminosity: " + getLuminosity() + "\n" +
+                "Energy Source: " + getEnergySource() + "\n" +
+                "Planetary System: " + getPlanetarySystem().getSystemName();
     }
 }

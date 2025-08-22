@@ -282,6 +282,30 @@ public class Driver {
         }
     }
 
+    private String askEnergySource() {
+        System.out.println("""
+        Select Energy Source:
+        1) Nuclear Fusion
+        2) Geothermal
+        3) Solar Powered
+        4) Tidal Heating
+    """);
+
+        while (true) {
+            int choice = ScannerInput.readNextInt("Enter choice (1-4): ");
+
+            switch (choice) {
+                case 1: return "Nuclear Fusion";
+                case 2: return "Geothermal";
+                case 3: return "Solar Powered";
+                case 4: return "Tidal Heating";
+                default: System.out.println("Invalid choice. Please select 1-4.");
+            }
+        }
+    }
+
+
+
     private void addCelestial() {
         int celestialType = ScannerInput.readNextInt("""
         Which type of celestial object do you wish to add? 
@@ -306,17 +330,16 @@ public class Driver {
         double diameter = ScannerInput.readNextDouble("Enter diameter (in km, > 0.5, default 0.5): ");
         if (diameter < 0.5) diameter = 0.5;
 
+        String energySource = askEnergySource();
 
         switch (celestialType) {
             case 1 -> {
                 //CelestialSystemAPI.addStar();
                 char spectralType = ScannerInput.readNextChar("Enter spectral type (O, B, A, F, G, K, M): ");
                 double luminosity = ScannerInput.readNextDouble("Enter luminosity: ");
-                celestialAPI.addCelestialObject(new Star(name, mass, diameter, planetarySystem, spectralType, luminosity));
+                celestialAPI.addCelestialObject(new Star(name, mass, diameter,energySource, planetarySystem, spectralType, luminosity));
                 System.out.println("Star added successfully.");
-                System.out.println(CelestialSystemAPI.getValidId());
-                boolean saveNow = askYesNo("Do you want to save now?");
-                if (saveNow) saveAllData();
+                CelestialSystemAPI.getValidId();
             }
             case 2 -> {
                 //CelestialSystemAPI.addGasPlannet();
@@ -326,11 +349,9 @@ public class Driver {
                 String gasComposition = ScannerInput.readNextLine("Enter gas composition (max 20 chars): ");
                 String coreComposition = ScannerInput.readNextLine("Enter core composition (max 40 chars): ");
                 double radiationLevel = ScannerInput.readNextDouble("Enter radiation level: ");
-                celestialAPI.addCelestialObject(new GasPlanet(name, mass, diameter, planetarySystem, avgTemp, surfaceType,
+                celestialAPI.addCelestialObject(new GasPlanet(name, mass, diameter,energySource, planetarySystem, avgTemp, surfaceType,
                         hasLiquidWater, gasComposition, coreComposition, radiationLevel));
                 System.out.println("Gas Planet added successfully.");
-                boolean saveNow = askYesNo("Do you want to save now?");
-                if (saveNow) saveAllData();
             }
             case 3 -> {
                 //CelestialSystemAPI.addIcePlanet();
@@ -338,11 +359,9 @@ public class Driver {
                 String surfaceType = ScannerInput.readNextLine("Enter surface type: ");
                 boolean hasLiquidWater = askYesNo("Does it have liquid water?");
                 String iceComposition = ScannerInput.readNextLine("Enter ice composition (max 30 chars): ");
-                celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter, planetarySystem, avgTemp,
+                celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter,energySource, planetarySystem, avgTemp,
                         surfaceType, hasLiquidWater, iceComposition));
                 System.out.println("Ice Planet added successfully.");
-                boolean saveNow = askYesNo("Do you want to save now?");
-                if (saveNow) saveAllData();
             }
             default -> System.out.println("Invalid celestial object type selected.");
         }

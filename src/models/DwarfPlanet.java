@@ -6,10 +6,10 @@ public class DwarfPlanet extends Planet {
 
     private String surfaceComposition;
 
-    public DwarfPlanet(String name, double mass, double diameter, PlanetarySystem planetarySystem,
+    public DwarfPlanet(String name, double mass, double diameter,String energySource, PlanetarySystem planetarySystem,
                        double averageTemperature, String surfaceType, boolean hasLiquidWater,
                        String surfaceComposition) {
-        super(name, mass, diameter, planetarySystem, averageTemperature, surfaceType, hasLiquidWater);
+        super(name, mass, diameter,energySource, planetarySystem, averageTemperature, surfaceType, hasLiquidWater);
         setSurfaceComposition(surfaceComposition);
     }
 

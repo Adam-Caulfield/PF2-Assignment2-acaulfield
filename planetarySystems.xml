@@ -4,5 +4,13 @@
       <systemName>newsave</systemName>
       <orbittingStarName>1</orbittingStarName>
     </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>newsystem</systemName>
+      <orbittingStarName>12</orbittingStarName>
+    </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>newwww</systemName>
+      <orbittingStarName>q</orbittingStarName>
+    </models.PlanetarySystem>
   </list>
 </object-stream>

@@ -1,5 +1,7 @@
 package models;
 
+import utils.EnergySourceUtility;
+
 public abstract class CelestialBody {
     private static int nextId = 1000;
     private int id;
@@ -8,19 +10,33 @@ public abstract class CelestialBody {
     private double diameter;
     private PlanetarySystem planetarySystem;
     private double gravity;
+    private String energySource;
 
-    public CelestialBody(String name, double mass, double diameter,PlanetarySystem planetarySystem) {
+    public CelestialBody(String name, double mass, double diameter, String energySource, PlanetarySystem planetarySystem) {
         this.id = nextId++;
 
         setName(name);
         setMass(mass);
         setDiameter(diameter);
-        calculateGravity(gravity);
+        calculateGravity();
+        setEnergySource(energySource);
 
         if (planetarySystem == null) {
             throw new IllegalArgumentException("Planetary System must not be null");
         }
         this.planetarySystem = planetarySystem;
+    }
+
+    public void setEnergySource(String energySource) {
+        if (EnergySourceUtility.isValidEnergySource(energySource)) {
+            this.energySource = energySource.trim();
+        } else {
+            this.energySource = "Unknown";
+        }
+    }
+
+    public String getEnergySource() {
+        return energySource;
     }
 
     public int getId() {
@@ -38,7 +54,6 @@ public abstract class CelestialBody {
     public double getDiameter() {
         return diameter;
     }
-
 
     public PlanetarySystem getPlanetarySystem() {
         return planetarySystem;
@@ -73,9 +88,9 @@ public abstract class CelestialBody {
     }
 
 
-    private double calculateGravity(double gravity) {
+    private double calculateGravity() {
         if (mass > 0 && diameter > 0) {
-            gravity = mass * diameter;
+            this.gravity = mass * diameter;
             return gravity;
         } else {
             gravity = 0;

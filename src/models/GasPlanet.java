@@ -9,10 +9,10 @@ public class GasPlanet extends Planet {
     private double radiationLevel;
 
     // Constructor
-    public GasPlanet(String name, double mass, double diameter, PlanetarySystem planetarySystem,
+    public GasPlanet(String name, double mass, double diameter,String energySource, PlanetarySystem planetarySystem,
                      double averageTemperature, String surfaceType, boolean hasLiquidWater,
                      String gasComposition, String coreComposition, double radiationLevel) {
-        super(name, mass, diameter, planetarySystem, averageTemperature, surfaceType, hasLiquidWater);
+        super(name, mass, diameter,energySource, planetarySystem, averageTemperature, surfaceType, hasLiquidWater);
         setGasComposition(gasComposition);
         setCoreComposition(coreComposition);
         setRadiationLevel(radiationLevel);
@@ -53,7 +53,10 @@ public class GasPlanet extends Planet {
 
 
     public String displayInfo() {
-        return "Gas Composition: " + getGasComposition() +
+
+        return
+                 toString()+
+                "Gas Composition: " + getGasComposition() +
                 ", Core Composition: " + getCoreComposition() +
                 ", Radiation Level: " + getRadiationLevel();
     }

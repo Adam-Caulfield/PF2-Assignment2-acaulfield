@@ -16,7 +16,7 @@ class CelestialBodyTest {
         @BeforeEach
         void setUp() {
             planetarySystem = new PlanetarySystem("G-type", "G-Sun");
-            star = new Star("Sun", 5778, 1.0, planetarySystem,'M', 1500);
+            star = new Star("Sun", 5778, 1.0,energySource Geothermal,  planetarySystem,'M', 1500);
             giantStar = new Star("Giant6789012345678901234567890", 10000, 50.0, planetarySystem,'O', 200000);
             tooBigStar = new Star("1234567890123456789012345678901", 8909, 1.5,planetarySystem,'R', 2000000 );
             tooSmallStar = new Star("", 0, 0,null,'A', 0 );

@@ -1,14 +1,16 @@
 package models;
 
 import utils.SpectralTypeUtility;
+import utils.EnergySourceUtility;
 
 public abstract class StellarObject extends CelestialBody {
 
     private char spectralType;
     private double luminosity;
 
-    public StellarObject(String name, double mass, double diameter, PlanetarySystem planetarySystem, char type, double luminosity) {
-        super(name, mass, diameter,planetarySystem);
+    public StellarObject(String name, double mass, double diameter, String energySource,
+                         PlanetarySystem planetarySystem, char type, double luminosity) {
+        super(name, mass, diameter, energySource, planetarySystem);
 
 
         if (SpectralTypeUtility.isValidSpectralType(type)) {
@@ -22,6 +24,11 @@ public abstract class StellarObject extends CelestialBody {
             this.luminosity = luminosity;
         } else {
             this.luminosity = 1000.0; // default
+        }
+
+
+        if (!EnergySourceUtility.isValidEnergySource(getEnergySource())) {
+            setEnergySource("Unknown"); //default
         }
     }
 
@@ -45,20 +52,8 @@ public abstract class StellarObject extends CelestialBody {
         }
     }
 
-    private boolean isValidStellartype(char type) {
-        return SpectralTypeUtility.isValidSpectralType(type);
-    }
-
     @Override
     public String displayInfo() {
-        return "Spectral Type is: " + spectralType + " - Luminosity is: " + luminosity + ";";
+        return "Spectral Type is: " + spectralType + " - Luminosity is: " + luminosity + "Energy Source: " + getEnergySource();
     }
 }
-
-/*
-More Info
-https://lweb.cfa.harvard.edu/~pberlind/atlas/htmls/note.html - spectral type
-One fundamental property of a star is the total amount of energy it radiates each second. This energy output is called luminosity or absolute brightness.
-https://www.teachastronomy.com/textbook/Properties-of-Stars/Stellar-Luminosity/#:~:text=A%20slightly%20modified%20version%20of,called%20luminosity%20or%20absolute%20brightness.
-
- */
