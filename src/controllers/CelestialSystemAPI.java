@@ -6,7 +6,6 @@ import models.*;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class CelestialSystemAPI {
     public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
@@ -29,26 +28,40 @@ public class CelestialSystemAPI {
         return false;
     }
 
-    public boolean topFiveHighestRadiationGasPlanet() {
-        for (int i = gasPlanets.size() - 1; i >= 0; i--) {
-            int highestIndex = 0;
-            for (int j = 0; j <= i; j++) {
-                if (gasPlanets.get(j).getRadiationLevel() > gasPlanets.get(highestIndex).getRadiationLevel()) {
-                    highestIndex = j;
+    public String topFiveHighestRadiationGasPlanet() {
+            if (gasPlanets.isEmpty()) return "No Gas Planets";
+
+            //sort for descending radiation using swapPlanets
+            for (int i = 0; i < gasPlanets.size() - 1; i++) {
+                int maxIndex = i;
+                for (int j = i + 1; j < gasPlanets.size(); j++) {
+                    if (gasPlanets.get(j).getRadiationLevel() > gasPlanets.get(maxIndex).getRadiationLevel()) {
+                        maxIndex = j;
+                    }
+                }
+                if (maxIndex != i) {
+                    swapPlanets(gasPlanets, i, maxIndex);
                 }
             }
-            swapPlanets(gasPlanets, i, highestIndex);
+
+            // Limit to top 5
+            int limit = gasPlanets.size() < 5 ? gasPlanets.size() : 5;
+            StringBuilder result = new StringBuilder("Top " + limit + " Gas Planets by Radiation:\n");
+            for (int i = 0; i < limit; i++) {
+                result.append(i + 1).append(": ").append(gasPlanets.get(i).displayInfo()).append("\n");
+            }
+
+            return result.toString();
         }
-        return true;
-    }
 
-    private void swapPlanets(ArrayList<GasPlanet> list, int i, int j) {
-        GasPlanet temp = list.get(i);
-        list.set(i, list.get(j));
-        list.set(j, temp);
-    }
+        private void swapPlanets(ArrayList<GasPlanet> list, int i, int j) {
+            GasPlanet temp = list.get(i);
+            list.set(i, list.get(j));
+            list.set(j, temp);
+        }
 
-    public String listAllGasPlanets() {
+
+        public String listAllGasPlanets() {
         if (gasPlanets.isEmpty()) return "No Gas Planets";
         String result = "";
         for (int i = 0; i < gasPlanets.size(); i++) result += i + ": " + gasPlanets.get(i) + "\n";
