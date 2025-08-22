@@ -1,0 +1,95 @@
+<object-stream>
+  <list>
+    <models.Star>
+      <id>1000</id>
+      <name>starChange</name>
+      <mass>12.0</mass>
+      <diameter>12.0</diameter>
+      <planetarySystem>
+        <systemName>newsystem</systemName>
+        <orbittingStarName>12</orbittingStarName>
+        <habitable>false</habitable>
+        <age>0</age>
+        <discovered>0</discovered>
+      </planetarySystem>
+      <gravity defined-in="models.CelestialBody">144.0</gravity>
+      <energySource>Nuclear Fusion</energySource>
+      <spectralType>K</spectralType>
+      <luminosity>1000.0</luminosity>
+      <gravity>2.2247666666666665E-11</gravity>
+    </models.Star>
+    <models.Star reference="../models.Star"/>
+    <models.GasPlanet>
+      <id>1000</id>
+      <name>gasplannet1</name>
+      <mass>1.0</mass>
+      <diameter>1.0</diameter>
+      <planetarySystem>
+        <systemName>newwww</systemName>
+        <orbittingStarName>q</orbittingStarName>
+        <habitable>false</habitable>
+        <age>0</age>
+        <discovered>0</discovered>
+      </planetarySystem>
+      <gravity>1.0</gravity>
+      <energySource>Nuclear Fusion</energySource>
+      <surfaceType>1</surfaceType>
+      <averageTemperature>1.0</averageTemperature>
+      <hasLiquidWater>true</hasLiquidWater>
+      <gasComposition>1</gasComposition>
+      <coreComposition>1</coreComposition>
+      <radiationLevel>1.0</radiationLevel>
+    </models.GasPlanet>
+    <models.GasPlanet>
+      <id>1001</id>
+      <name>2</name>
+      <mass>2.0</mass>
+      <diameter>2.0</diameter>
+      <planetarySystem reference="../../models.GasPlanet/planetarySystem"/>
+      <gravity>4.0</gravity>
+      <energySource>Geothermal</energySource>
+      <surfaceType>2</surfaceType>
+      <averageTemperature>2.0</averageTemperature>
+      <hasLiquidWater>true</hasLiquidWater>
+      <gasComposition>2</gasComposition>
+      <coreComposition>2</coreComposition>
+      <radiationLevel>2.0</radiationLevel>
+    </models.GasPlanet>
+    <models.GasPlanet>
+      <id>1002</id>
+      <name>gasplannet3</name>
+      <mass>4.0</mass>
+      <diameter>0.5</diameter>
+      <planetarySystem reference="../../models.GasPlanet/planetarySystem"/>
+      <gravity>2.0</gravity>
+      <energySource>Nuclear Fusion</energySource>
+      <surfaceType>123</surfaceType>
+      <averageTemperature>333.0</averageTemperature>
+      <hasLiquidWater>false</hasLiquidWater>
+      <gasComposition>123</gasComposition>
+      <coreComposition>23</coreComposition>
+      <radiationLevel>0.9</radiationLevel>
+    </models.GasPlanet>
+    <models.GasPlanet>
+      <id>1000</id>
+      <name>highrad</name>
+      <mass>1.0</mass>
+      <diameter>1.0</diameter>
+      <planetarySystem>
+        <systemName>newwww</systemName>
+        <orbittingStarName>q</orbittingStarName>
+        <habitable>false</habitable>
+        <age>0</age>
+        <discovered>0</discovered>
+      </planetarySystem>
+      <gravity>1.0</gravity>
+      <energySource>Nuclear Fusion</energySource>
+      <surfaceType>rad</surfaceType>
+      <averageTemperature>222.0</averageTemperature>
+      <hasLiquidWater>true</hasLiquidWater>
+      <gasComposition>heluim</gasComposition>
+      <coreComposition>23</coreComposition>
+      <radiationLevel>40.0</radiationLevel>
+    </models.GasPlanet>
+  </list>
+</object-stream>
