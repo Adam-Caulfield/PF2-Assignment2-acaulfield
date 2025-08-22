@@ -10,11 +10,28 @@ public class IcePlanet extends Planet {
         super(name, mass, diameter,energySource, planetarySystem, averageTemperature, surfaceType, hasLiquidWater);
         this.iceComposition = iceComposition;
     }
-    private void setIceComposition(String iceComposition) {
+
+
+    public void setIceComposition(String iceComposition) {
+        if (iceComposition != null && !iceComposition.isBlank()) {
+            this.iceComposition = iceComposition;
+        }
+    }
+
+    public String getIceComposition() {
+        return iceComposition;
     }
 
     @Override
     public String classifyBody() {
-        return "";
+        return "Ice Planet";
+    }
+
+
+
+
+    @Override
+    public String displayInfo() {
+        return toString() + "\nIce Composition: " + iceComposition;
     }
 }

@@ -11,7 +11,6 @@ class PlanetarySystemAPITest {
 
     PlanetarySystem planetarySystem1;
     PlanetarySystem planetarySystem2;
-  //  PlanetarySystemAPITestHelper helper;
 
     private PlanetarySystemAPI populatedDevices;
     private PlanetarySystemAPI emptyDevices;

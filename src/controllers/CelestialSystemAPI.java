@@ -408,4 +408,13 @@ public class CelestialSystemAPI {
 
         return true;
     }
+
+    public CelestialBody getbyIndex(int id) {
+        if (id >= 0 && id < allCelestialBodies.size()) {
+            return allCelestialBodies.get(id);
+        } else {
+            return null;
+        }
+    }
+
 }

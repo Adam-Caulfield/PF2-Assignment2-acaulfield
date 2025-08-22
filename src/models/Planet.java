@@ -15,7 +15,6 @@ public abstract class Planet extends CelestialBody {
  }
 
 
-
  public String getSurfaceType() {
   return surfaceType;
  }
@@ -27,10 +26,6 @@ public abstract class Planet extends CelestialBody {
    this.surfaceType = surfaceType;
   }
  }
-
-
-
-
 
 
  public double getAverageTemperature() {

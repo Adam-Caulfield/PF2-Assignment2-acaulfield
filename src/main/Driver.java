@@ -6,7 +6,6 @@ import controllers.PlanetarySystemAPI;
 
 import models.*;
 import utils.ScannerInput;
-import utils.Utilities;
 
 import java.io.File;
 
@@ -245,7 +244,7 @@ public class Driver {
                 case 3 -> System.out.println(celestialAPI.listAllCelestialBodies());
                 case 4 -> {
                     System.out.println("which would you like to update");
-        //            updateCelestial();
+                   updateCelestial();
                 }
                 default -> System.out.println("Invalid option entered" + option);
             }
@@ -253,26 +252,78 @@ public class Driver {
             option = celestialAPIMenu();
         }
     }
-/*
+
     private void updateCelestial() {
         listCelestialId();
         int id = ScannerInput.readNextInt("Enter the ID of the celestial object to update: ");
-        if (celestialAPI.isValidId(id) != -1) {
-            String newName = ScannerInput.readNextLine("Enter new name (leave blank to keep unchanged): ");
-            double newMass = ScannerInput.readNextDouble("Enter new mass (>0.1, enter -1 to keep unchanged): ");
-            double newDiameter = ScannerInput.readNextDouble("Enter new diameter (>0.5, enter -1 to keep unchanged): ");
-            askEnergySource();
-            boolean updated = celestialAPI.updateCelestialObject(id, newName, newMass, newDiameter,);
-            if (updated) {
-                System.out.println("Update successful.");
-            } else {
-                System.out.println("Update failed.");
-            }
-        } else {
+
+        CelestialBody obj = celestialAPI.getbyIndex(id);
+
+        if (obj == null) {
             System.out.println("Invalid ID entered.");
+            return;
         }
+
+        System.out.println("Leave fields blank or enter -1 to keep current values.");
+
+        // Common fields
+        String newName = ScannerInput.readNextLine("Enter new name (leave blank to keep unchanged): ");
+        double newMass = ScannerInput.readNextDouble("Enter new mass (>0.1, -1 to keep unchanged): ");
+        double newDiameter = ScannerInput.readNextDouble("Enter new diameter (>0.5, -1 to keep unchanged): ");
+        String newEnergySource = askEnergySource();
+
+        if (!newName.isBlank()) obj.setName(newName);
+        if (newMass >= 0.1) obj.setMass(newMass);
+        if (newDiameter >= 0.5) obj.setDiameter(newDiameter);
+        obj.setEnergySource(newEnergySource);
+
+        // Type-specific updates
+        if (obj instanceof Star star) {
+            String spectralInput = ScannerInput.readNextLine("Enter new spectral type (O, B, A, F, G, K, M) or leave blank: ").toUpperCase();
+            if (!spectralInput.isBlank() && "OBAFGKM".contains(spectralInput)) {
+                star.setSpectralType(spectralInput.charAt(0));
+            }
+
+            double newLuminosity = ScannerInput.readNextDouble("Enter new luminosity (-1 to keep current): ");
+            if (newLuminosity >= 0) star.setLuminosity(newLuminosity);
+
+        } else if (obj instanceof GasPlanet gas) {
+            double newTemp = ScannerInput.readNextDouble("Enter new average surface temperature (-999 to keep current): ");
+            if (newTemp != -999) gas.setAverageTemperature(newTemp);
+
+            String newSurface = ScannerInput.readNextLine("Enter new surface type or leave blank: ");
+            if (!newSurface.isBlank()) gas.setSurfaceType(newSurface);
+
+            boolean hasWater = askYesNo("Does it have liquid water? (Y/N): ");
+            gas.setHasLiquidWater(hasWater);
+
+            String newGasComp = ScannerInput.readNextLine("Enter new gas composition or leave blank: ");
+            if (!newGasComp.isBlank()) gas.setGasComposition(newGasComp);
+
+            String newCoreComp = ScannerInput.readNextLine("Enter new core composition or leave blank: ");
+            if (!newCoreComp.isBlank()) gas.setCoreComposition(newCoreComp);
+
+            double newRadiation = ScannerInput.readNextDouble("Enter new radiation level (-1 to keep current): ");
+            if (newRadiation >= 0) gas.setRadiationLevel(newRadiation);
+
+        } else if (obj instanceof IcePlanet ice) {
+            double newTemp = ScannerInput.readNextDouble("Enter new average surface temperature (-999 to keep current): ");
+            if (newTemp != -999) ice.setAverageTemperature(newTemp);
+
+            String newSurface = ScannerInput.readNextLine("Enter new surface type or leave blank: ");
+            if (!newSurface.isBlank()) ice.setSurfaceType(newSurface);
+
+            boolean hasWater = askYesNo("Does it have liquid water? (Y/N): ");
+            ice.setHasLiquidWater(hasWater);
+
+            String newIceComp = ScannerInput.readNextLine("Enter new ice composition or leave blank: ");
+            if (!newIceComp.isBlank()) ice.setIceComposition(newIceComp);
+        }
+
+        System.out.println("Update successful.");
     }
-*/
+
+
     private void deleteCelestial() {
         listCelestialId();
         int id = ScannerInput.readNextInt("Please enter id number to delete: ");
