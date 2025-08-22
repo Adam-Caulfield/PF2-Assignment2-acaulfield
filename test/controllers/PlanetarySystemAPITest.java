@@ -20,11 +20,18 @@ class PlanetarySystemAPITest {
 
 
     private PlanetarySystemAPI populatedDevices = new PlanetarySystemAPI(new File("planetarySystemsTest.xml"));
-    private PlanetarySystemAPI emptyDevices = new PlanetarySystemAPI(new File("planetary.xml"));
+    private PlanetarySystemAPI emptyDevices = new PlanetarySystemAPI(new File("planetarySystems.xml"));
 
     @BeforeEach
     void setUp() {
-        planetarySystem1 = new PlanetarySystem("Galaxy Far, far away" , "something bright" );
+        planetarySystem1 =new PlanetarySystem(
+                "Solar System",   // systemName
+                "G-Sun",          // orbittingStarName
+                4,                // age
+                true,             // habitable
+                2000,             // discovered
+                "G-type"          // systemType
+        );
         try {
             populatedDevices.load();
             emptyDevices.load();
@@ -59,32 +66,28 @@ class PlanetarySystemAPITest {
     class ListingMethods {
 
         @Test
-        void listAllReturnsNoPlanetartyStoredWhenArrayListIsEmpty() {
+        void listAllReturnsMessageWhenNoPlanetarySystemsStored() {
             assertEquals(4, emptyDevices.getPlanetarySystems().size());
-            assertTrue(emptyDevices.listPlanetarySystems().toLowerCase().contains(" planetary systems"));
+            assertTrue(PlanetarySystemAPI.listPlanetarySystems().contains("No Planetary Systems"));
         }
 
         @Test
-        void listAllReturnsPlanetartyDevicesStoredWhenArrayListHasPlanetartyDevicesStored() {
+        void listAllReturnsPlanetarySystemsWhenStored() {
             assertEquals(4, populatedDevices.getPlanetarySystems().size());
-            String populatedDeviceStr = populatedDevices.listPlanetarySystems();
+            String populatedDeviceStr = PlanetarySystemAPI.listPlanetarySystems();
             //checks for objects in the string
             assertTrue(populatedDeviceStr.contains("Solar System"));
             assertTrue(populatedDeviceStr.contains("GE345"));
             assertTrue(populatedDeviceStr.contains("Generic_234"));
             assertTrue(populatedDeviceStr.contains("orbits around: SUN"));
-
-
         }
 
         @Test
-        void listByNameWhereNoneExist() {
+        void listByNameReturnsMessageWhenNoneExist() {
             assertEquals(4, populatedDevices.getPlanetarySystems().size());
             String populatedDeviceStr = populatedDevices.listAllByPlanetarySystemName("Solar Doesnt exist");
-            assertTrue(populatedDeviceStr.contains("No Planetary Systems"));
+            assertTrue(populatedDeviceStr.contains("No Planetary Systems of that name"));
         }
-
-
     }
 
     @Nested

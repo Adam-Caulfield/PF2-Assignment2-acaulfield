@@ -1,101 +1,109 @@
 package models;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlanetarySystemTest {
+
     PlanetarySystem pValid, pInvalid, pBorder, pBelowBorder, pEmpty;
 
     @BeforeEach
-    public void setup() {//50 30
-        pValid = new PlanetarySystem("Solar System", "Sun");
-        pInvalid = new PlanetarySystem("Solar System1234567890123456789012345678901234567890", "Sun4567890123456789012345678901");
-        pBorder = new PlanetarySystem("Solar System34567890123456789012345678901234567890", "Sun456789012345678901234567890");
-        pBelowBorder = new PlanetarySystem("Solar System3456789012345678901234567890123456789", "Sun45678901234567890123456789");
-        pEmpty = new PlanetarySystem("", "");
+    void setup() {
+        pValid = new PlanetarySystem("Solar System", "Sun", 4, true, 2000, "G-type");
+        pInvalid = new PlanetarySystem("Solar System1234567890123456789012345678901234567890",
+                "Sun4567890123456789012345678901", 5, false, 1990, "K-type");
+        pBorder = new PlanetarySystem("Solar System34567890123456789012345678901234567890",
+                "Sun456789012345678901234567890", 6, true, 1980, "M-type");
+        pBelowBorder = new PlanetarySystem("Solar System3456789012345678901234567890123456789",
+                "Sun45678901234567890123456789", 7, false, 1970, "O-type");
+        pEmpty = new PlanetarySystem("", "", 0, false, 1900, "");
     }
 
     @Test
     void constructorTests() {
-        assertEquals("Solar System", pValid.getSystemName());  //value accepted - under 50 length limit
-        assertEquals("Solar System12345678901234567890123456789012345678", pInvalid.getSystemName());  //value truncated to  50 length limit
+        // systemName
+        assertEquals("Solar System", pValid.getSystemName());
+        assertEquals("Solar System12345678901234567890123456789012345678", pInvalid.getSystemName()); // truncated to 50
         assertEquals("Solar System34567890123456789012345678901234567890", pBorder.getSystemName());
         assertEquals("Solar System3456789012345678901234567890123456789", pBelowBorder.getSystemName());
         assertEquals("", pEmpty.getSystemName());
 
-        //testing numEmployees (>=1)  - at valid and invalid,
-        assertEquals("Sun", pValid.getOrbittingStarName());  //valid value accepted correctly
-        assertEquals("Sun456789012345678901234567890", pInvalid.getOrbittingStarName());  // check that default is set when invalid input given
-        assertEquals("Sun456789012345678901234567890", pBorder.getOrbittingStarName());    // check that limit is accepted as valid input
+        // orbittingStarName
+        assertEquals("Sun", pValid.getOrbittingStarName());
+        assertEquals("Sun456789012345678901234567890", pInvalid.getOrbittingStarName()); // truncated to 30
+        assertEquals("Sun456789012345678901234567890", pBorder.getOrbittingStarName());
         assertEquals("Sun45678901234567890123456789", pBelowBorder.getOrbittingStarName());
         assertEquals("", pEmpty.getOrbittingStarName());
 
+        // systemType
+        assertEquals("G-type", pValid.getSystemType());
+        assertEquals("K-type", pInvalid.getSystemType());
+        assertEquals("M-type", pBorder.getSystemType());
+        assertEquals("O-type", pBelowBorder.getSystemType());
+        assertEquals("", pEmpty.getSystemType());
     }
 
     @Test
     void planetaryNameGetAndSetWorkingCorrectly() {
-        assertEquals("Solar System", pValid.getSystemName());  //value accepted - under 50 length limit
-        pValid.setSystemName("Bigger Solar System");  //valid change
-        assertEquals("Bigger Solar System", pValid.getSystemName());  //value accepted - under 50 length limit
-        pValid.setSystemName("Solar System34567890123456789012345678901234567890");  //valid change
-        assertEquals("Solar System34567890123456789012345678901234567890", pValid.getSystemName());  //value accepted - under 50 length limit
-        pValid.setSystemName("");  //valid change
-        assertEquals("", pValid.getSystemName());  //value accepted - under 50 length limit
-        pValid.setSystemName("Solar System1234567890123456789012345678901234567890");  //invalid change
-        assertEquals("", pValid.getSystemName());  //
+        assertEquals("Solar System", pValid.getSystemName());
+        pValid.setSystemName("Bigger Solar System");
+        assertEquals("Bigger Solar System", pValid.getSystemName());
 
+        pValid.setSystemName("Solar System1234567890123456789012345678901234567890"); // too long
+        assertEquals("Bigger Solar System", pValid.getSystemName()); // should reject and will stay same
+
+        pValid.setSystemName("New Name");
+        assertEquals("New Name", pValid.getSystemName());
     }
-
 
     @Test
     void orbitStarGetAndSetWorkingCorrectly() {
-        assertEquals("Sun", pValid.getOrbittingStarName());  //valid value accepted correctly
+        assertEquals("Sun", pValid.getOrbittingStarName());
         pValid.setOrbittingStarName("Sunny Sun");
         assertEquals("Sunny Sun", pValid.getOrbittingStarName());
+
+        pValid.setOrbittingStarName("Sunny Sun12345678901234567890123445566890"); // too long
+        assertEquals("Sunny Sun", pValid.getOrbittingStarName()); // truncated/ignored
+
         pValid.setOrbittingStarName("");
         assertEquals("", pValid.getOrbittingStarName());
-        pValid.setOrbittingStarName("Sunny Sun");
-        assertEquals("Sunny Sun", pValid.getOrbittingStarName());
-        pValid.setOrbittingStarName("Sunny Sun12345678901234567890123445566890");
-        assertEquals("Sunny Sun", pValid.getOrbittingStarName());
-
-
     }
 
     @Test
     void validatingTheEqualsMethod() {
-        //checking that equals works when the objects are at the same location
-        PlanetarySystem planSysInvalid = pValid;
-        assertEquals(planSysInvalid, pValid);
-        //now checking that true is returned when the values in separate objects are the same
-        assertEquals(pValid, new PlanetarySystem("Solar System", "Sun"));
-        //checking that false is returned  when one or both fields are different
-        assertNotEquals(pValid, new PlanetarySystem("Our Solar System", "Sun"));
-        assertNotEquals(pValid, new PlanetarySystem("Solar System", "The Sun"));
-        assertNotEquals(pValid, new PlanetarySystem("Our Solar System", "The Sun"));
+        PlanetarySystem sameRef = pValid;
+        assertEquals(sameRef, pValid);
+
+        PlanetarySystem sameValues = new PlanetarySystem("New Name", "Sunny Sun", 1, true, 2000, "G-type");
+        sameValues.setSystemName(pValid.getSystemName());
+        sameValues.setOrbittingStarName(pValid.getOrbittingStarName());
+        assertEquals(pValid, sameValues);
+
+        PlanetarySystem diffName = new PlanetarySystem("Other Name", "Sun", 1, true, 2000, "G-type");
+        PlanetarySystem diffStar = new PlanetarySystem("Solar System", "Other Sun", 1, true, 2000, "G-type");
+        PlanetarySystem bothDiff = new PlanetarySystem("Other Name", "Other Sun", 1, true, 2000, "G-type");
+
+        assertNotEquals(pValid, diffName);
+        assertNotEquals(pValid, diffStar);
+        assertNotEquals(pValid, bothDiff);
     }
 
     @Nested
     class ToString {
         @Test
-        void toStringContainsAllFieldsInObject() {
-
-            String planetaryString = pValid.toString();
-            assertTrue(planetaryString.contains("Solar System"));
-            assertTrue(planetaryString.contains("SUN"));
-
-
+        void toStringContainsAllFields() {
+            String str = pValid.toString();
+            assertTrue(str.contains("Solar System"));
+            assertTrue(str.contains("SUN"));
         }
 
         @Test
-        void toStringAddsEmployeesToTheString() {
-
-            String planetaryString = pInvalid.toString();
-            assertTrue(planetaryString.contains("Solar"));
-
-
+        void toStringHandlesLongNames() {
+            String str = pInvalid.toString();
+            assertTrue(str.contains("Solar"));
         }
     }
 }

@@ -59,7 +59,7 @@ public class Driver {
                 case 1 -> runPlanetaryMenu();
                 case 2 -> runCelestialAPIMenu();
                 case 3 -> runReportsMenu();
-                case 4 -> System.out.println(PlanetarySystemAPI.listPlanetarySystems());
+                case 4 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
                 case 5 -> System.out.println(planetarySystemAPI.searchObjects());
                 case 6 -> sortCelestialObjects();
                 case 10 -> saveAllData();
@@ -149,7 +149,8 @@ public class Driver {
         if (planetarySystemAPI.addPLanetSystem(
                 new PlanetarySystem(planetarysystemsName, orbittingStar, Age, habitable, Discovered,systemType)
         )) {
-            System.out.println("Add successful");
+            System.out.println("Changes saved");
+            saveAllData();
         } else {
             System.out.println("Add not successful");
         }
@@ -339,7 +340,7 @@ public class Driver {
     private void addCelestial() {
 
         int index = ScannerInput.readNextInt("Enter the index of the planetary system to add this celestial object to: ");
-        PlanetarySystemAPI.listPlanetarySystems();
+        System.out.println(planetarySystemAPI.listPlanetarySystems());
         PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByIndex(index);
         System.out.println("you selected : "+planetarySystem);
         if (planetarySystem == null) {

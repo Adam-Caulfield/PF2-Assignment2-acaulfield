@@ -4,6 +4,7 @@ import utils.Utilities;
 import java.util.Objects;
 
 public class PlanetarySystem {
+    public String getSystemID;
     private String systemName;        // e.g. Solar System - max 50 chars
     private String orbittingStarName; // e.g. Sun - max 30 chars
     private boolean habitable;
@@ -77,6 +78,14 @@ public class PlanetarySystem {
         }
     }
 
+    public void setGetSystemID(String getSystemID) {
+        this.getSystemID = getSystemID;
+    }
+
+    public String getGetSystemID() {
+        return getSystemID;
+    }
+
     // Equals & hashCode
     @Override
     public boolean equals(Object o) {
@@ -94,6 +103,7 @@ public class PlanetarySystem {
                 ", Habitable: " + habitable +
                 ", Age: " + age +
                 " Billion years" +
-                ", Discovered: " + discovered;
+                ", Discovered: " + discovered +
+                ", System Type: " + systemType;
     }
 }

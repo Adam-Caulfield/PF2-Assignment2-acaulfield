@@ -6,18 +6,16 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import models.PlanetarySystem;
 import utils.ISerializer;
 
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static utils.Utilities.isValidIndex;
 
-
 //todo include PlanetarySystem API into starter code
 public class PlanetarySystemAPI implements ISerializer {
 
-    private static List<PlanetarySystem> planetarySystemList = new ArrayList<>();
+    private List<PlanetarySystem> planetarySystemList = new ArrayList<>();
 
     private File file;
 
@@ -25,10 +23,9 @@ public class PlanetarySystemAPI implements ISerializer {
         this.file = file;
     }
 
-    public static boolean listAllPlaneterySystems() {
+    public boolean listAllPlaneterySystems() {
         return planetarySystemList.isEmpty();
     }
-
 
     //---------------------
     // Create methods
@@ -60,19 +57,18 @@ public class PlanetarySystemAPI implements ISerializer {
         return null;
     }
 
-
-    public static String listPlanetarySystems(){
-        String listPlanetarySystems = "";
-        for (PlanetarySystem planetarySystem : planetarySystemList){
-            listPlanetarySystems += planetarySystemList.indexOf(planetarySystem) + ": " + planetarySystem + "\n";
-        }
-        if (listPlanetarySystems.equals("")){
+    public String listPlanetarySystems() {
+        if (planetarySystemList.isEmpty()) {
             return "No Planetary Systems";
-
         }
-        else {
-            return listPlanetarySystems;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < planetarySystemList.size(); i++) {
+            sb.append(i)
+                    .append(": ")
+                    .append(planetarySystemList.get(i).toString())
+                    .append("\n");
         }
+        return sb.toString();
     }
     public String listAllByPlanetarySystemName(String pName){
         if (!planetarySystemList.isEmpty()) {

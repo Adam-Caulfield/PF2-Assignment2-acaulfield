@@ -34,6 +34,7 @@ public class Star extends StellarObject {
                 "Spectral Type: " + getSpectralType() + "\n" +
                 "Luminosity: " + getLuminosity() + "\n" +
                 "Energy Source: " + getEnergySource() + "\n" +
-                "Planetary System: " + getPlanetarySystem().getSystemName();
+                "Planetary System: " + getPlanetarySystem().getSystemName()+ "\n"+
+                 "id: "+getId()+"\n";
     }
 }

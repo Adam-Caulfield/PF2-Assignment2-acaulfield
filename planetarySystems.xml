@@ -3,14 +3,31 @@
     <models.PlanetarySystem>
       <systemName>newsave</systemName>
       <orbittingStarName>1</orbittingStarName>
+      <habitable>false</habitable>
+      <age>0</age>
+      <discovered>0</discovered>
     </models.PlanetarySystem>
     <models.PlanetarySystem>
       <systemName>newsystem</systemName>
       <orbittingStarName>12</orbittingStarName>
+      <habitable>false</habitable>
+      <age>0</age>
+      <discovered>0</discovered>
     </models.PlanetarySystem>
     <models.PlanetarySystem>
       <systemName>newwww</systemName>
       <orbittingStarName>q</orbittingStarName>
+      <habitable>false</habitable>
+      <age>0</age>
+      <discovered>0</discovered>
+    </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>mew</systemName>
+      <orbittingStarName>newsavefortests</orbittingStarName>
+      <habitable>true</habitable>
+      <age>123</age>
+      <discovered>2000</discovered>
+      <systemType>multi-Star</systemType>
     </models.PlanetarySystem>
   </list>
 </object-stream>

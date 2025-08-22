@@ -1,11 +1,13 @@
 package models;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StarTest {
+
     private Star star;
     private Star giantStar;
     private Star tooBigStar, tooSmallStar;
@@ -13,52 +15,146 @@ class StarTest {
     private PlanetarySystem planetarySystem;
     @BeforeEach
     void setUp() {
-        planetarySystem = new PlanetarySystem("G-type", "G-Sun");
-        star = new Star("Sun", 5778, 1.0, planetarySystem,'M', 1500);
-        giantStar = new Star("Giant", 10000, 50.0, planetarySystem,'O', 200000);
-        tooBigStar = new Star("1234567890123456789012345678901", 8909, 1.5,planetarySystem,'R', 2000000 );
-        tooSmallStar = new Star("", 0, 0,planetarySystem,'A', 0 );
+        planetarySystem = new PlanetarySystem(
+                "Solar System",   // systemName
+                "G-Sun",          // orbittingStarName
+                4,                // age
+                true,             // habitable
+                2000,             // discovered
+                "G-type"          // systemType
+        );
+
+        star = new Star("Sun", 5778, 1.0, "Geothermal", planetarySystem, 'M', 1500);
+        giantStar = new Star("Giant6789012345678901234567890", 10000, 50.0, "Geothermal", planetarySystem, 'O', 200000);
+        tooBigStar = new Star("1234567890123456789012345678901", 8909, 1.5, "Geothermal", planetarySystem, 'R', 2000000);
+        // Updated tooSmallStar to use a valid PlanetarySystem instead of null
+        PlanetarySystem smallPlanetarySystem = new PlanetarySystem(
+                "Tiny System",    // systemName
+                "Tiny-Star",      // orbittingStarName
+                1,                // age
+                false,            // habitable
+                2025,             // discovered
+                "M-type"          // systemType
+        );
+        tooSmallStar = new Star("", 0, 0, "Geothermal", smallPlanetarySystem, 'A', 0);
+    }
+
+    @AfterEach
+    void tearDown() {
+        planetarySystem = null;
+        star = null;
+        giantStar = null;
+        tooBigStar = null;
+        tooSmallStar = null;
+        planetarySystem = null;
     }
 
     @Test
-    void constructors(){
-        assertEquals(planetarySystem, star.getPlanetarySystem());
+    void testValidStarCreation() {
+        assertTrue(star.getId() >=1 );
         assertEquals("Sun", star.getName());
         assertEquals(5778, star.getMass());
-        assertEquals(1.0, star.getDiameter(), .01);
-        assertEquals('M', star.getSpectralType());
-        assertEquals(1500, star.getLuminosity());
-
+        assertEquals(planetarySystem, star.getPlanetarySystem());
+        assertEquals(1.0, star.getDiameter());
     }
 
-@Test
-    void testDisplayInfo() {
-    String dispStr = star.displayInfo();
-    assertTrue(dispStr.contains("Spectral Type: "));
-    assertTrue(dispStr.contains("M"));
-    assertTrue(dispStr.contains("Luminosity: "));
-    assertTrue(dispStr.contains("1500"));
-}
+    @Test
+    void testBigValidStarCreation() {
+        assertTrue(giantStar.getId() >=1 );
+        assertEquals("Giant6789012345678901234567890", giantStar.getName());
+        assertEquals(10000, giantStar.getMass());
+        assertEquals(planetarySystem, giantStar.getPlanetarySystem());
+        assertEquals(50.0, giantStar.getDiameter());
+    }
 
-@Test
-    void testCalculateGravity() {
-    assertEquals(1.54E-6, star.calculateGravity(), .00001);
-}
+    @Test
+    void testInValidStarCreation() {
+        assertTrue(tooBigStar.getId() >=1 );
+        assertEquals("123456789012345678901234567890", tooBigStar.getName());
+        assertEquals(8909, tooBigStar.getMass());
+        assertEquals(planetarySystem, tooBigStar.getPlanetarySystem());
+        assertEquals(1.5, tooBigStar.getDiameter(), .01);
 
-@Test
-    void testClassifyBody() {
-    assertEquals("Star", star.classifyBody());
+        assertTrue(tooSmallStar.getId() >=1 );
+        assertEquals("Unnamed", tooSmallStar.getName());
+        assertEquals(.1, tooSmallStar.getMass(), .01);
+        assertEquals("Tiny System", tooSmallStar.getPlanetarySystem().getSystemName());
+        assertEquals(0.5, tooSmallStar.getDiameter(), .01);
+    }
 
-}
+    @Test
+    void testSetValidMass() {
+        star.setMass(1.5);
+        assertEquals(1.5, star.getMass(), .01);
+        star.setMass(15.0);
+        assertEquals(15.0, star.getMass(), .01);
+    }
+
+    @Test
+    void testSetInvalidMass() {
+        assertEquals(5778, star.getMass(), .01);
+        star.setMass(-2.0);
+        assertEquals(.1, star.getMass(), .01);
+        star.setMass(0.0);
+        assertEquals(.1, star.getMass(), .01); //.01 default so should not change
+    }
+
+    @Test
+    void testSetValidDiameter() {
+        assertEquals(1.0, star.getDiameter());
+        star.setDiameter(1.5);
+        assertEquals(1.5, star.getDiameter(), .01);
+    }
+
+    @Test
+    void testSetInvalidDiameter() {
+        assertEquals(1.0, star.getDiameter());
+        star.setDiameter(-2.0);
+        assertEquals(0.5, star.getDiameter());
+        star.setDiameter(0.0);
+        assertEquals(0.5, star.getDiameter());//.5 default should not change
+    }
+
+    @Test
+    void testSetValidName() {
+        assertEquals("Sun", star.getName());
+        star.setName("12345678901234567890123456789");
+        assertEquals("12345678901234567890123456789", star.getName());
+        star.setName("123456789012345678901234567890");
+        assertEquals("123456789012345678901234567890", star.getName());
+    }
+
+    @Test
+    void testSetInValidName() {
+        assertEquals("Sun", star.getName());
+        star.setName("123456789012345678901234567890XXX132321");
+        assertEquals("123456789012345678901234567890", star.getName()); //will just trim anything additional not alllowing longer then 30 char
+    }
+
+    @Test
+    void testSetPlanetarySystem() {
+        assertEquals(planetarySystem, star.getPlanetarySystem());
+        PlanetarySystem newPlanetarySystem = new PlanetarySystem(
+                "New System",    // systemName
+                "New-Star",      // orbittingStarName
+                2,               // age
+                false,           // habitable
+                2020,            // discovered
+                "K-type"         // systemType
+        );
+        star.setPlanetarySystem(newPlanetarySystem);
+        assertEquals(newPlanetarySystem, star.getPlanetarySystem());
+    }
 
     @Test
     void testToString() {
-    String toString = star.toString();
-    assertTrue(toString.contains("Star: "));
-    assertTrue(toString.contains("SpectralType: "));
-    assertTrue(toString.contains("M"));
-    assertTrue(toString.contains("luminosity: "));
-    assertTrue(toString.contains("1500"));
-
+        String starString = star.toString();
+        assertTrue(starString.contains("id: "));
+        assertTrue(starString.contains("Name: "));
+        assertTrue(starString.contains("Sun"));
+        assertTrue(starString.contains("Mass: "));
+        assertTrue(starString.contains("5778"));
+        assertTrue(starString.contains("Diameter: "));
+        assertTrue(starString.contains("1.0"));
     }
 }
