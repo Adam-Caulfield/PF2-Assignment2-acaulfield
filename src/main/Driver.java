@@ -254,15 +254,14 @@ public class Driver {
         while (option != 0) {
             switch (option) {
                 case 1 -> {
-                    System.out.println(planetarySystemAPI.listPlanetarySystems());
-
                     addCelestial();
+                    saveAllData();
                 }
                 case 2 -> deleteCelestial();
                 case 3 -> System.out.println(celestialAPI.listAllCelestialBodies());
                 case 4 -> {
                     System.out.println("which would you like to update");
-                   updateCelestial();
+                    updateCelestial();
                 }
                 default -> System.out.println("Invalid option entered" + option);
             }
@@ -272,7 +271,7 @@ public class Driver {
     }
 
     private void updateCelestial() {
-        listCelestialId();
+        System.out.println(celestialAPI.listAllCelestialBodies());
         int id = ScannerInput.readNextInt("Enter the ID of the celestial object to update: ");
 
         CelestialBody obj = celestialAPI.getbyIndex(id);

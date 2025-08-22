@@ -7,40 +7,26 @@ import models.*;
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- *
- */
 public class CelestialSystemAPI {
     public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
     private static ArrayList<Star> stars = new ArrayList<>();
     private static ArrayList<IcePlanet> icePlanets = new ArrayList<>();
     private static ArrayList<GasPlanet> gasPlanets = new ArrayList<>();
 
-    public CelestialSystemAPI(File file) {
-    }
+    public CelestialSystemAPI(File file) {}
 
     public static int getValidId() {
-        int id = allCelestialBodies.size() + 1;  // start from size + 1
-
-
-        if (idExists(id)) {
-            id++;
-        }
+        int id = allCelestialBodies.size() + 1;
+        if (idExists(id)) id++;
         return id;
     }
 
     private static boolean idExists(int id) {
         for (CelestialBody body : allCelestialBodies) {
-            if (body.getId() == id) {
-                return true;
-            }
+            if (body.getId() == id) return true;
         }
         return false;
     }
-
-    //public static void () {
-
-
 
     public boolean topFiveHighestRadiationGasPlanet() {
         for (int i = gasPlanets.size() - 1; i >= 0; i--) {
@@ -62,70 +48,49 @@ public class CelestialSystemAPI {
     }
 
     public String listAllGasPlanets() {
-        if (gasPlanets.isEmpty()) {
-            return "No Gas Planets";
-        }
+        if (gasPlanets.isEmpty()) return "No Gas Planets";
         String result = "";
-        for (int i = 0; i < gasPlanets.size(); i++) {
-            result += i + ": " + gasPlanets.get(i) + "\n";
-        }
+        for (int i = 0; i < gasPlanets.size(); i++) result += i + ": " + gasPlanets.get(i) + "\n";
         return result;
     }
 
     public String listAllIcePlanets() {
-        if (icePlanets.isEmpty()) {
-            return "No Ice Planets";
-        }
+        if (icePlanets.isEmpty()) return "No Ice Planets";
         String result = "";
-        for (int i = 0; i < icePlanets.size(); i++) {
-            result += i + ": " + icePlanets.get(i) + "\n";
-        }
+        for (int i = 0; i < icePlanets.size(); i++) result += i + ": " + icePlanets.get(i) + "\n";
         return result;
     }
 
     public String listAllStars() {
-        if (stars.isEmpty()) {
-            return "No Stars";
-        }
+        if (stars.isEmpty()) return "No Stars";
         String result = "";
-        for (int i = 0; i < stars.size(); i++) {
-            result += i + ": " + stars.get(i) + "\n";
-        }
+        for (int i = 0; i < stars.size(); i++) result += i + ": " + stars.get(i) + "\n";
         return result;
     }
 
-    public void setIcePlanets(ArrayList<IcePlanet> icePlanets) {
-        this.icePlanets = icePlanets;
-    }
-
-    public void setStars(ArrayList<Star> stars) {
-        this.stars = stars;
-    }
+    public void setIcePlanets(ArrayList<IcePlanet> icePlanets) { this.icePlanets = icePlanets; }
+    public void setStars(ArrayList<Star> stars) { this.stars = stars; }
 
     public void addCelestialObject(CelestialBody obj) {
-        if (obj instanceof Star)addStar((Star) obj);
+        if (obj instanceof Star) addStar((Star) obj);
         else if (obj instanceof GasPlanet) gasPlanets.add((GasPlanet) obj);
         else if (obj instanceof IcePlanet) icePlanets.add((IcePlanet) obj);
         else throw new IllegalArgumentException("Unsupported celestial type: " + obj.getClass().getSimpleName());
         allCelestialBodies.add(obj);
     }
 
-
     public static boolean addStar(Star obj) {
-
         if (obj.getPlanetarySystem() == null) return false;
-
         stars.add(obj);
         allCelestialBodies.add(obj);
         return true;
     }
 
-
     public static boolean addGasPlannet(String name, double mass, double diameter,
-                                       String energySource, PlanetarySystem system,
-                                       double avgTemp, String surfaceType,
-                                       boolean hasLiquidWater, String gasComp, String coreComp,
-                                       double radiationLevel) {
+                                        String energySource, PlanetarySystem system,
+                                        double avgTemp, String surfaceType,
+                                        boolean hasLiquidWater, String gasComp, String coreComp,
+                                        double radiationLevel) {
         if (system == null) return false;
         GasPlanet planet = new GasPlanet(name, mass, diameter, energySource, system,
                 avgTemp, surfaceType, hasLiquidWater, gasComp, coreComp, radiationLevel);
@@ -134,7 +99,6 @@ public class CelestialSystemAPI {
         return true;
     }
 
-    // Add an Ice Planet
     public static boolean addIcePlanet(String name, double mass, double diameter,
                                        String energySource, PlanetarySystem system,
                                        double avgTemp, String surfaceType,
@@ -147,48 +111,21 @@ public class CelestialSystemAPI {
         return true;
     }
 
-
     public String listAllCelestialObjectsForGivenPlanetary(PlanetarySystem system) {
         if (system == null) return "Invalid Planetary System";
         StringBuilder sb = new StringBuilder();
         for (CelestialBody obj : allCelestialBodies) {
-            if (obj.getPlanetarySystem().equals(system)) {  // filter by system
-                sb.append(obj).append("\n");
-            }
+            if (obj.getPlanetarySystem().equals(system)) sb.append(obj).append("\n");
         }
         return sb.length() == 0 ? "No Celestial Bodies for this system" : sb.toString();
     }
 
-
-    public Star getStarByIndex(int index) {
-        if (index >= 0 && index < stars.size()) return stars.get(index);
-        return null;
-    }
-
-    public GasPlanet getGasPlanetByIndex(int index) {
-        if (index >= 0 && index < gasPlanets.size()) return gasPlanets.get(index);
-        return null;
-    }
-
-    public IcePlanet getIcePlanetByIndex(int index) {
-        if (index >= 0 && index < icePlanets.size()) return icePlanets.get(index);
-        return null;
-    }
-
-    public Star getStarByName(String name) {
-        for (Star s : stars) if (s.getName().equalsIgnoreCase(name)) return s;
-        return null;
-    }
-
-    public GasPlanet getGasPlanetByName(String name) {
-        for (GasPlanet g : gasPlanets) if (g.getName().equalsIgnoreCase(name)) return g;
-        return null;
-    }
-
-    public IcePlanet getIcePlanetByName(String name) {
-        for (IcePlanet i : icePlanets) if (i.getName().equalsIgnoreCase(name)) return i;
-        return null;
-    }
+    public Star getStarByIndex(int index) { if (index >= 0 && index < stars.size()) return stars.get(index); return null; }
+    public GasPlanet getGasPlanetByIndex(int index) { if (index >= 0 && index < gasPlanets.size()) return gasPlanets.get(index); return null; }
+    public IcePlanet getIcePlanetByIndex(int index) { if (index >= 0 && index < icePlanets.size()) return icePlanets.get(index); return null; }
+    public Star getStarByName(String name) { for (Star s : stars) if (s.getName().equalsIgnoreCase(name)) return s; return null; }
+    public GasPlanet getGasPlanetByName(String name) { for (GasPlanet g : gasPlanets) if (g.getName().equalsIgnoreCase(name)) return g; return null; }
+    public IcePlanet getIcePlanetByName(String name) { for (IcePlanet i : icePlanets) if (i.getName().equalsIgnoreCase(name)) return i; return null; }
 
     public boolean updateStar(String oldName, Star updatedStar) {
         for (int i = 0; i < stars.size(); i++) {
@@ -330,15 +267,32 @@ public class CelestialSystemAPI {
     public void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
         XStream.setupDefaultSecurity(xstream);
-        xstream.allowTypes(new Class[]{ArrayList.class, Star.class, GasPlanet.class, IcePlanet.class});
+
+        // Solution to allow classes seen in shop V8
+        xstream.allowTypes(new Class[]{
+                ArrayList.class,
+                CelestialBody.class,
+                Star.class,
+                GasPlanet.class,
+                IcePlanet.class,
+                PlanetarySystem.class
+        });
+
         ObjectInputStream is = xstream.createObjectInputStream(new FileReader("CelestialObjects.xml"));
+        allCelestialBodies = (ArrayList<CelestialBody>) is.readObject();
+        is.close();
+
+        stars.clear();
+        gasPlanets.clear();
+        icePlanets.clear();
+
         for (CelestialBody obj : allCelestialBodies) {
             if (obj instanceof Star) stars.add((Star) obj);
             else if (obj instanceof GasPlanet) gasPlanets.add((GasPlanet) obj);
             else if (obj instanceof IcePlanet) icePlanets.add((IcePlanet) obj);
         }
-        is.close();
     }
+
 
     public void save() throws Exception {
         XStream xstream = new XStream(new DomDriver());
@@ -349,13 +303,7 @@ public class CelestialSystemAPI {
         out.close();
     }
 
-
-    public String listAllCelestialBodies() {
-        if (allCelestialBodies.isEmpty()) return "No Celestial Bodies";
-        String result = "";
-        for (int i = 0; i < allCelestialBodies.size(); i++) result += i + ": " + allCelestialBodies.get(i) + "\n";
-        return result;
-    }
+    public String listAllCelestialBodies() { if (allCelestialBodies.isEmpty()) return "No Celestial Bodies"; String result = ""; for (int i = 0; i < allCelestialBodies.size(); i++) result += i + ": " + allCelestialBodies.get(i) + "\n"; return result; }
 
     public void sortByMassDescending() {
         for (int i = allCelestialBodies.size() - 1; i >= 0; i--) {

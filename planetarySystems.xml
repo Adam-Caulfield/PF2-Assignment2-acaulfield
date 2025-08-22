@@ -53,5 +53,13 @@
       <discovered>1901</discovered>
       <systemType>multi</systemType>
     </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>2</systemName>
+      <orbittingStarName>1</orbittingStarName>
+      <habitable>true</habitable>
+      <age>3</age>
+      <discovered>1901</discovered>
+      <systemType></systemType>
+    </models.PlanetarySystem>
   </list>
 </object-stream>
