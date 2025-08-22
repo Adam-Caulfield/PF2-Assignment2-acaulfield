@@ -29,5 +29,13 @@
       <discovered>2000</discovered>
       <systemType>multi-Star</systemType>
     </models.PlanetarySystem>
+    <models.PlanetarySystem>
+      <systemName>testSystem</systemName>
+      <orbittingStarName>newPlanet</orbittingStarName>
+      <habitable>true</habitable>
+      <age>1</age>
+      <discovered>1900</discovered>
+      <systemType>multi-Star</systemType>
+    </models.PlanetarySystem>
   </list>
 </object-stream>

@@ -17,25 +17,25 @@ class CelestialBodyTest {
     @BeforeEach
     void setUp() {
         planetarySystem = new PlanetarySystem(
-                "Solar System",   // systemName
-                "G-Sun",          // orbittingStarName
-                4,                // age
-                true,             // habitable
-                2000,             // discovered
-                "G-type"          // systemType
+                "Solar System",
+                "G-Sun",
+                4,
+                true,
+                2000,
+                "G-type"
         );
 
         star = new Star("Sun", 5778, 1.0, "Geothermal", planetarySystem, 'M', 1500);
         giantStar = new Star("Giant6789012345678901234567890", 10000, 50.0, "Geothermal", planetarySystem, 'O', 200000);
         tooBigStar = new Star("1234567890123456789012345678901", 8909, 1.5, "Geothermal", planetarySystem, 'R', 2000000);
-        // Updated tooSmallStar to use a valid PlanetarySystem instead of null
+
         PlanetarySystem smallPlanetarySystem = new PlanetarySystem(
-                "Tiny System",   // systemName
-                "Tiny-Star",     // orbittingStarName
-                1,               // age
-                false,           // habitable
-                2025,            // discovered
-                "M-type"         // systemType
+                "Tiny System",
+                "Tiny-Star",
+                1,
+                false,
+                2025,
+                "M-type"
         );
         tooSmallStar = new Star("", 0, 0, "Geothermal", smallPlanetarySystem, 'A', 0);
     }
@@ -151,13 +151,15 @@ class CelestialBodyTest {
     void testToString() {
             String starString = star.toString();;
 
-            assertTrue(starString.contains("Name: "));
-            assertTrue(starString.contains("Sun"));
-            assertTrue(starString.contains("Mass: "));
-            assertTrue(starString.contains("5778"));
-            assertTrue(starString.contains("Diameter: "));
-            assertTrue(starString.contains("1.0"));
-            assertTrue(starString.contains("id: "));
-
+        assertTrue(starString.contains("Star Details:\n"));
+        assertTrue(starString.contains("Name: " + star.getName()));
+        assertTrue(starString.contains("Mass: " + star.getMass()));
+        assertTrue(starString.contains("Diameter: " + star.getDiameter()));
+        assertTrue(starString.contains("Gravity: " + star.calculateGravity()));
+        assertTrue(starString.contains("Spectral Type: " + star.getSpectralType()));
+        assertTrue(starString.contains("Luminosity: " + star.getLuminosity()));
+        assertTrue(starString.contains("Energy Source: " + star.getEnergySource()));
+        assertTrue(starString.contains("Planetary System: " + star.getPlanetarySystem().getSystemName()));
+        assertTrue(starString.contains("id: " + star.getId()));
     }
 }

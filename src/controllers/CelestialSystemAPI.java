@@ -7,6 +7,9 @@ import models.*;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class CelestialSystemAPI {
     public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
     private static ArrayList<Star> stars = new ArrayList<>();
@@ -34,6 +37,8 @@ public class CelestialSystemAPI {
         }
         return false;
     }
+
+    //public static void () {
 
 
 
@@ -98,34 +103,61 @@ public class CelestialSystemAPI {
     }
 
     public void addCelestialObject(CelestialBody obj) {
-        if (obj instanceof Star) stars.add((Star) obj);
+        if (obj instanceof Star)addStar((Star) obj);
         else if (obj instanceof GasPlanet) gasPlanets.add((GasPlanet) obj);
         else if (obj instanceof IcePlanet) icePlanets.add((IcePlanet) obj);
         else throw new IllegalArgumentException("Unsupported celestial type: " + obj.getClass().getSimpleName());
         allCelestialBodies.add(obj);
     }
 
-    public static boolean addStar(Star star) {
-        if (star == null) return false;
-        stars.add(star);
-        allCelestialBodies.add(star);
+
+    public static boolean addStar(Star obj) {
+
+        if (obj.getPlanetarySystem() == null) return false;
+
+        stars.add(obj);
+        allCelestialBodies.add(obj);
         return true;
     }
 
-    public static boolean addGasPlannet(GasPlanet planet) {
-        if (planet == null) return false;
+
+    public static boolean addGasPlannet(String name, double mass, double diameter,
+                                       String energySource, PlanetarySystem system,
+                                       double avgTemp, String surfaceType,
+                                       boolean hasLiquidWater, String gasComp, String coreComp,
+                                       double radiationLevel) {
+        if (system == null) return false;
+        GasPlanet planet = new GasPlanet(name, mass, diameter, energySource, system,
+                avgTemp, surfaceType, hasLiquidWater, gasComp, coreComp, radiationLevel);
         gasPlanets.add(planet);
         allCelestialBodies.add(planet);
         return true;
     }
 
-    public static boolean addIcePlanet(IcePlanet planet) {
-        if (planet == null) return false;
+    // Add an Ice Planet
+    public static boolean addIcePlanet(String name, double mass, double diameter,
+                                       String energySource, PlanetarySystem system,
+                                       double avgTemp, String surfaceType,
+                                       boolean hasLiquidWater, String coreComp) {
+        if (system == null) return false;
+        IcePlanet planet = new IcePlanet(name, mass, diameter, energySource, system,
+                avgTemp, surfaceType, hasLiquidWater, coreComp);
         icePlanets.add(planet);
         allCelestialBodies.add(planet);
         return true;
     }
 
+
+    public String listAllCelestialObjectsForGivenPlanetary(PlanetarySystem system) {
+        if (system == null) return "Invalid Planetary System";
+        StringBuilder sb = new StringBuilder();
+        for (CelestialBody obj : allCelestialBodies) {
+            if (obj.getPlanetarySystem().equals(system)) {  // filter by system
+                sb.append(obj).append("\n");
+            }
+        }
+        return sb.length() == 0 ? "No Celestial Bodies for this system" : sb.toString();
+    }
 
 
     public Star getStarByIndex(int index) {
@@ -294,14 +326,6 @@ public class CelestialSystemAPI {
         return false;
     }
 
-    public String listAllCelestialObjectsForGivenPlanetary(PlanetarySystem m) {
-        if (allCelestialBodies.isEmpty()) return "No Celestial Bodies";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < allCelestialBodies.size(); i++) {
-            sb.append(i).append(": ").append(allCelestialBodies.get(i)).append("\n");
-        }
-        return sb.toString();
-    }
 
     public void load() throws Exception {
         XStream xstream = new XStream(new DomDriver());
@@ -363,7 +387,7 @@ public class CelestialSystemAPI {
         }
     }
 
-    public boolean updateCelestialObject(int id, String newName, double newMass, double newDiameter,String energySource2) {
+    public boolean updateCelestialObject(int id, String newName, double newMass, double newDiameter, String energySource2) {
 
 
         CelestialBody obj = allCelestialBodies.get(id);

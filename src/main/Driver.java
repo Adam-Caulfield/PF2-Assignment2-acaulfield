@@ -335,25 +335,31 @@ public class Driver {
         }
     }
 
-
-
-    private void addCelestial() {
-
-        int index = ScannerInput.readNextInt("Enter the index of the planetary system to add this celestial object to: ");
+    private PlanetarySystem askPlanetarySystem() {
         System.out.println(planetarySystemAPI.listPlanetarySystems());
+        int index = ScannerInput.readNextInt("Enter the index of the planetary system to add this celestial object to: ");
         PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByIndex(index);
         System.out.println("you selected : "+planetarySystem);
         if (planetarySystem == null) {
             System.out.println("Planetary system does not exist. Cannot add celestial object.");
+            return planetarySystem;
+        }
+        return planetarySystem;
+    }
+
+    private void addCelestial() {
+        PlanetarySystem planetarySystem = askPlanetarySystem(); // get the correct system
+        if (planetarySystem == null) {
+            System.out.println("Cannot add celestial object. No valid planetary system selected.");
             return;
         }
-        int celestialType = ScannerInput.readNextInt("""
-        Which type of celestial object do you wish to add? 
-        1) Star
-        2) Gas Planet
-        3) Ice Planet
-        ==>> """);
 
+        int celestialType = ScannerInput.readNextInt("""
+    Which type of celestial object do you wish to add? 
+    1) Star
+    2) Gas Planet
+    3) Ice Planet
+    ==>> """);
 
         String name = ScannerInput.readNextLine("Enter name of celestial object (max 30 chars): ");
         double mass = ScannerInput.readNextDouble("Enter mass (in ronnagrams, > 0.1, default 0.1): ");
@@ -366,7 +372,6 @@ public class Driver {
 
         switch (celestialType) {
             case 1 -> {
-                //CelestialSystemAPI.addStar();
                 char spectralType;
                 while (true) {
                     spectralType = ScannerInput.readNextChar("Enter spectral type (O, B, A, F, G, K, M): ");
@@ -383,35 +388,34 @@ public class Driver {
 
                 System.out.println("You selected spectral type: " + spectralType);
                 double luminosity = ScannerInput.readNextDouble("Enter luminosity (double to represent light): ");
-                celestialAPI.addCelestialObject(new Star(name, mass, diameter,energySource, planetarySystem, spectralType, luminosity));
-                System.out.println("Star added successfully.");
-                CelestialSystemAPI.getValidId();
+                Star star = new Star(name, mass, diameter, energySource, planetarySystem, spectralType, luminosity);
+                celestialAPI.addCelestialObject(star);
             }
             case 2 -> {
-                //CelestialSystemAPI.addGasPlannet();
                 double avgTemp = ScannerInput.readNextDouble("Enter average surface temperature (°C, between -400 and 400): ");
                 String surfaceType = ScannerInput.readNextLine("Enter surface type: ");
                 boolean hasLiquidWater = askYesNo("Does it have liquid water?");
                 String gasComposition = ScannerInput.readNextLine("Enter gas composition (max 20 chars): ");
                 String coreComposition = ScannerInput.readNextLine("Enter core composition (max 40 chars): ");
                 double radiationLevel = ScannerInput.readNextDouble("Enter radiation level: ");
-                celestialAPI.addCelestialObject(new GasPlanet(name, mass, diameter,energySource, planetarySystem, avgTemp, surfaceType,
-                        hasLiquidWater, gasComposition, coreComposition, radiationLevel));
-                System.out.println("Gas Planet added successfully.");
+                CelestialSystemAPI.addGasPlannet(name, mass, diameter, energySource, planetarySystem,
+                        avgTemp, surfaceType, hasLiquidWater, gasComposition, coreComposition, radiationLevel);
             }
-            case 3 -> {
-                //CelestialSystemAPI.addIcePlanet();
+            case 3 -> { // Ice Planet
                 double avgTemp = ScannerInput.readNextDouble("Enter average surface temperature (°C, between -400 and 400): ");
                 String surfaceType = ScannerInput.readNextLine("Enter surface type: ");
                 boolean hasLiquidWater = askYesNo("Does it have liquid water?");
                 String iceComposition = ScannerInput.readNextLine("Enter ice composition (max 30 chars): ");
-                celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter,energySource, planetarySystem, avgTemp,
-                        surfaceType, hasLiquidWater, iceComposition));
-                System.out.println("Ice Planet added successfully.");
+                celestialAPI.addCelestialObject(new IcePlanet(name, mass, diameter, energySource, planetarySystem,
+                        avgTemp, surfaceType, hasLiquidWater, iceComposition));
             }
             default -> System.out.println("Invalid celestial object type selected.");
         }
+
+        System.out.println("Celestial object added successfully.");
     }
+
+
 
 
     public void runReportsMenu() {
@@ -517,13 +521,25 @@ public class Driver {
     }
 
     public void listAllCelestialFromaGivenPlanetary() {
-        String manu = ScannerInput.readNextLine("What planetary systems you want a list of objects for?  : ");
-        PlanetarySystem m = planetarySystemAPI.getPlanetarySystemByName(manu);
-        if (!(m == null))
-            System.out.println(celestialAPI.listAllCelestialObjectsForGivenPlanetary(m));
-        else
-            System.out.println("No planetary systems with tha name exists");
+        PlanetarySystem selectedSystem = askPlanetarySystem();
+
+        if (selectedSystem != null) {
+            System.out.println("\nCelestial objects associated with " + selectedSystem.getSystemName() + ":");
+
+            // Filter objects belonging only to this planetary system
+            for (CelestialBody obj : celestialAPI.allCelestialBodies) {
+                if (obj.getPlanetarySystem() != null &&
+                        obj.getPlanetarySystem().getSystemName().equals(selectedSystem.getSystemName())) {
+
+                    System.out.println( obj.displayInfo());
+                }
+            }
+        } else {
+            System.out.println("No planetary system selected.");
+        }
     }
+
+
 
 
     //---------------------
