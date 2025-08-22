@@ -1,28 +1,41 @@
 package models;
 
 import utils.Utilities;
-
 import java.util.Objects;
 
 public class PlanetarySystem {
-    private String systemName; //Solar System -  max 50 chars
-    private String orbittingStarName; //e.g Sun for Solar System - max 30 chars
-
-
-
-
-    public PlanetarySystem(String systemName, String orbittingStarName) {
+    private String systemName;        // e.g. Solar System - max 50 chars
+    private String orbittingStarName; // e.g. Sun - max 30 chars
+    private boolean habitable;
+    private int age;                  // in billions of years
+    private int discovered;           // year discovered (1900–2025)
+    private String systemType;
+    // Full constructor
+    public PlanetarySystem(String systemName, String orbittingStarName, int age, boolean habitable, int discovered,String systemType) {
         this.systemName = Utilities.truncateString(systemName, 50);
         this.orbittingStarName = Utilities.truncateString(orbittingStarName, 30);
+        this.age = age;
+        this.habitable = habitable;
+        setDiscovered(discovered);
+        this.systemType = systemType;
     }
 
+    // Getters & Setters
     public String getSystemName() {
         return systemName;
     }
 
+    public void setSystemType(String systemType) {
+        this.systemType = systemType;
+    }
+    public String getSystemType() {
+        return systemType;
+    }
+
     public void setSystemName(String systemName) {
-        if (Utilities.validStringlength(systemName, 50))
+        if (Utilities.validStringlength(systemName, 50)) {
             this.systemName = systemName;
+        }
     }
 
     public String getOrbittingStarName() {
@@ -30,10 +43,41 @@ public class PlanetarySystem {
     }
 
     public void setOrbittingStarName(String orbittingStarName) {
-        if (Utilities.validStringlength(orbittingStarName, 30))
+        if (Utilities.validStringlength(orbittingStarName, 30)){
             this.orbittingStarName = orbittingStarName;
+        }
     }
 
+    public boolean isHabitable() {
+        return habitable;
+    }
+
+    public void setHabitable(boolean habitable) {
+        this.habitable = habitable;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getDiscovered() {
+        return discovered;
+    }
+
+    // Validate discovered year between 1900 and 2025
+    public void setDiscovered(int discovered) {
+        if (discovered >= 1900 && discovered <= 2025) {
+            this.discovered = discovered;
+        } else {
+            this.discovered = -1; // invalid year
+        }
+    }
+
+    // Equals & hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,17 +88,12 @@ public class PlanetarySystem {
 
     @Override
     public String toString() {
-        return "Planetary System:  " +
+        return "Planetary System: " +
                 "Name: " + systemName +
-                ", orbits around: " + orbittingStarName.toUpperCase() ;
+                ", Orbits Around: " + orbittingStarName.toUpperCase() +
+                ", Habitable: " + habitable +
+                ", Age: " + age +
+                " Billion years" +
+                ", Discovered: " + discovered;
     }
 }
-
-/*
-Extra Information about this class
-Our solar system is just one specific planetary system—a star with planets orbiting around it.
-Our planetary system is the only one officially called “solar system,” but astronomers have discovered more than 3,200
-other stars with planets orbiting them in our galaxy. That’s just how many we’ve found so far.
-There are likely to be many more planetary systems out there waiting to be discovered!
-
- */

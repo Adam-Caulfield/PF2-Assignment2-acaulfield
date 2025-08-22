@@ -363,14 +363,14 @@ public class CelestialSystemAPI {
         }
     }
 
-    public boolean updateCelestialObject(int id, String newName, double newMass, double newDiameter) {
+    public boolean updateCelestialObject(int id, String newName, double newMass, double newDiameter,String energySource2) {
 
 
         CelestialBody obj = allCelestialBodies.get(id);
         obj.setName(newName);
         obj.setMass(newMass);
         obj.setDiameter(newDiameter);
-
+        obj.setEnergySource(energySource2);
         if (obj instanceof Star) {
             int index = stars.indexOf(obj);
             if (index >= 0) stars.set(index, (Star) obj);

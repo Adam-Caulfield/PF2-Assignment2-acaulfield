@@ -134,17 +134,28 @@ public class Driver {
         }
     }
 
-
     private void addPlanetary() {
-        String planetarysystemsName = ScannerInput.readNextLine("Please enter the planetary systems name: ");
         String orbittingStar = ScannerInput.readNextLine("Please enter the name of the start that it orbits: ");
-
-        if (planetarySystemAPI.addPLanetSystem(new PlanetarySystem(planetarysystemsName, orbittingStar))) {
+        String planetarysystemsName = ScannerInput.readNextLine("Please enter the planetary systems name: ");
+        int Age = ScannerInput.readNextInt("Enter approximate age (in billions of years): ");
+        boolean habitable = askYesNo("Habitable?: ");
+        int Discovered;
+        while (true) {
+            Discovered = ScannerInput.readNextInt("Enter the year the planetary system was Discovered: ");
+            if (Discovered >= 1900 && Discovered <= 2025) break;
+            System.out.println("Invalid year. Please enter a value between 1900 and 2025.");
+        }
+        String systemType = ScannerInput.readNextLine("Please enter the system type such as Single Star Binary or multi-Star.");
+        if (planetarySystemAPI.addPLanetSystem(
+                new PlanetarySystem(planetarysystemsName, orbittingStar, Age, habitable, Discovered,systemType)
+        )) {
             System.out.println("Add successful");
         } else {
             System.out.println("Add not successful");
         }
     }
+
+
 
     private void deletePlanetary() {
         String planetarysystemsName = ScannerInput.readNextLine("Please enter the planetary systems name: ");
@@ -154,6 +165,7 @@ public class Driver {
             System.out.println("Delete not successful");
         }
     }
+
 
     private void updatePlanetary() {
         PlanetarySystem pSys = getPlanetaryByName();
@@ -165,8 +177,26 @@ public class Driver {
                 System.out.println("Star name Updated");
             else
                 System.out.println("Star Name NOT Updated");
-        } else
+
+            int newAge = ScannerInput.readNextInt("Enter new age (leave 0 to keep current): ");
+            if (newAge > 0) {
+                pSys.setAge(newAge);
+                System.out.println("Age updated.");
+            }
+
+            int newDiscovered;
+            while (true) {
+                newDiscovered = ScannerInput.readNextInt("Enter new discovered year (1900-2025, 0 to keep current): ");
+                if (newDiscovered == 0 || (newDiscovered >= 1900 && newDiscovered <= 2025)) break;
+                System.out.println("Invalid year. Please enter between 1900-2025 or 0 to skip.");
+            }
+            if (newDiscovered != 0) {
+                pSys.setDiscovered(newDiscovered);
+                System.out.println("Discovered year updated.");
+            }
+        } else {
             System.out.println("Planetary System name is NOT valid");
+        }
     }
 
     private void findPlanetary() {
@@ -214,7 +244,7 @@ public class Driver {
                 case 3 -> System.out.println(celestialAPI.listAllCelestialBodies());
                 case 4 -> {
                     System.out.println("which would you like to update");
-                    updateCelestial();
+        //            updateCelestial();
                 }
                 default -> System.out.println("Invalid option entered" + option);
             }
@@ -222,7 +252,7 @@ public class Driver {
             option = celestialAPIMenu();
         }
     }
-
+/*
     private void updateCelestial() {
         listCelestialId();
         int id = ScannerInput.readNextInt("Enter the ID of the celestial object to update: ");
@@ -230,8 +260,8 @@ public class Driver {
             String newName = ScannerInput.readNextLine("Enter new name (leave blank to keep unchanged): ");
             double newMass = ScannerInput.readNextDouble("Enter new mass (>0.1, enter -1 to keep unchanged): ");
             double newDiameter = ScannerInput.readNextDouble("Enter new diameter (>0.5, enter -1 to keep unchanged): ");
-
-            boolean updated = celestialAPI.updateCelestialObject(id, newName, newMass, newDiameter);
+            askEnergySource();
+            boolean updated = celestialAPI.updateCelestialObject(id, newName, newMass, newDiameter,);
             if (updated) {
                 System.out.println("Update successful.");
             } else {
@@ -241,7 +271,7 @@ public class Driver {
             System.out.println("Invalid ID entered.");
         }
     }
-
+*/
     private void deleteCelestial() {
         listCelestialId();
         int id = ScannerInput.readNextInt("Please enter id number to delete: ");
@@ -307,6 +337,15 @@ public class Driver {
 
 
     private void addCelestial() {
+
+        int index = ScannerInput.readNextInt("Enter the index of the planetary system to add this celestial object to: ");
+        PlanetarySystemAPI.listPlanetarySystems();
+        PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByIndex(index);
+        System.out.println("you selected : "+planetarySystem);
+        if (planetarySystem == null) {
+            System.out.println("Planetary system does not exist. Cannot add celestial object.");
+            return;
+        }
         int celestialType = ScannerInput.readNextInt("""
         Which type of celestial object do you wish to add? 
         1) Star
@@ -314,14 +353,6 @@ public class Driver {
         3) Ice Planet
         ==>> """);
 
-        String systemName = ScannerInput.readNextLine("Enter the name of the planetary system to add this celestial object to: ");
-        PlanetarySystemAPI.listPlanetarySystems();
-        PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByName(systemName);
-
-        if (planetarySystem == null) {
-            System.out.println("Planetary system does not exist. Cannot add celestial object.");
-            return;
-        }
 
         String name = ScannerInput.readNextLine("Enter name of celestial object (max 30 chars): ");
         double mass = ScannerInput.readNextDouble("Enter mass (in ronnagrams, > 0.1, default 0.1): ");
@@ -335,8 +366,22 @@ public class Driver {
         switch (celestialType) {
             case 1 -> {
                 //CelestialSystemAPI.addStar();
-                char spectralType = ScannerInput.readNextChar("Enter spectral type (O, B, A, F, G, K, M): ");
-                double luminosity = ScannerInput.readNextDouble("Enter luminosity: ");
+                char spectralType;
+                while (true) {
+                    spectralType = ScannerInput.readNextChar("Enter spectral type (O, B, A, F, G, K, M): ");
+                    spectralType = Character.toUpperCase(spectralType); // ensure uppercase
+
+                    if (spectralType == 'O' || spectralType == 'B' || spectralType == 'A' ||
+                            spectralType == 'F' || spectralType == 'G' || spectralType == 'K' ||
+                            spectralType == 'M') {
+                        break; // needs valid input to break the loop
+                    } else {
+                        System.out.println("Invalid spectral type. Please enter one of: O, B, A, F, G, K, M");
+                    }
+                }
+
+                System.out.println("You selected spectral type: " + spectralType);
+                double luminosity = ScannerInput.readNextDouble("Enter luminosity (double to represent light): ");
                 celestialAPI.addCelestialObject(new Star(name, mass, diameter,energySource, planetarySystem, spectralType, luminosity));
                 System.out.println("Star added successfully.");
                 CelestialSystemAPI.getValidId();
