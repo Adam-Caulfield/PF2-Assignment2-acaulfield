@@ -6,6 +6,7 @@ import models.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class CelestialSystemAPI {
     public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
@@ -364,5 +365,36 @@ public class CelestialSystemAPI {
             return null;
         }
     }
+    public static void clearFile() {
+        try {
+            // Clear all lists
+            allCelestialBodies.clear();
+            stars.clear();
+            gasPlanets.clear();
+            icePlanets.clear();
 
+            // Overwrite the file with an empty list
+            XStream xstream = new XStream(new DomDriver());
+            XStream.setupDefaultSecurity(xstream);
+            xstream.allowTypes(new Class[]{ArrayList.class, CelestialBody.class, Star.class, GasPlanet.class, IcePlanet.class, PlanetarySystem.class});
+
+            ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter("CelestialObjects.xml"));
+            os.writeObject(allCelestialBodies); // write empty list
+            os.close();
+
+            System.out.println("All celestial bodies cleared and file emptied.");
+        } catch (Exception e) {
+            System.err.println("Error clearing file: " + e.getMessage());
+        }
+    }
+
+
+    public static ArrayList<CelestialBody> getAllCelestials() {
+        return allCelestialBodies;
+    }
+
+
+    public int numberOfPlanetarySystems() {
+        return allCelestialBodies.size();
+    }
 }

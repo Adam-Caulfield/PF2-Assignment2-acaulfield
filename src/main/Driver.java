@@ -40,6 +40,7 @@ public class Driver {
                 |  4) Search Planetary Systems   |
                 |  5) Search Planetary Objects   |  
                 |  6) Sort Planetary Objects     | 
+                |  7) Clear all Data             |
                 |--------------------------------|
                 |  10) Save all                  |
                 |  11) Load all                  |
@@ -61,6 +62,7 @@ public class Driver {
                 case 4 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
                 case 5 -> System.out.println(planetarySystemAPI.searchObjects());
                 case 6 -> sortCelestialObjects();
+                case 7 ->  ClearallData();
                 case 10 -> saveAllData();
                 case 11 -> loadAllData();
                 default -> System.out.println("Invalid option entered" + option);
@@ -71,7 +73,10 @@ public class Driver {
         exitApp();
     }
 
-
+    private void ClearallData() {
+        clearCelestial();
+        clearPlanetaryObjects();
+    }
 
 
     private void sortCelestialObjects() {
@@ -244,6 +249,7 @@ public class Driver {
                 | 2) Delete a Celestial Object        |
                 | 3) List all Celestial Object       |
                 | 4) Update Celestial Object          |
+                | 5) Clear Celestial Objects          |
                 | 0) Return to main menu         |
                  ----------------------------""");
         return ScannerInput.readNextInt("==>>");
@@ -263,12 +269,34 @@ public class Driver {
                     System.out.println("which would you like to update");
                     updateCelestial();
                 }
+                case 5-> clearCelestial();
+
                 default -> System.out.println("Invalid option entered" + option);
             }
             ScannerInput.readNextLine("\n Press the enter key to continue");
             option = celestialAPIMenu();
         }
     }
+
+    private void clearCelestial() {
+        if (celestialAPI.numberOfPlanetarySystems() == 0) {
+            System.out.println("No Celestials to clear.");
+            return;
+        }
+
+        boolean clearFile = askYesNo("Do you also want to clear the file? (Yes = clear file, No = keep file)");
+
+        // Clear the list in memory
+        CelestialSystemAPI.getAllCelestials().clear();
+        System.out.println("All Planetary systems cleared.");
+
+        if (clearFile) {
+            CelestialSystemAPI.clearFile();
+            System.out.println("All backup data cleared.");
+        }
+    }
+
+
 
     private void updateCelestial() {
         System.out.println(celestialAPI.listAllCelestialBodies());
