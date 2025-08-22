@@ -111,6 +111,7 @@ public class Driver {
                 |  3) Update planetary systems details  |
                 |  4) List all planetary systems       |
                 |  5) Find a planetary systems          |
+                |  6) Clear planetary systems         |
                 |  0) Return to main menu          |
                  ----------------------------------""");
         return ScannerInput.readNextInt("==>>");
@@ -125,7 +126,7 @@ public class Driver {
                 case 3 -> updatePlanetary();
                 case 4 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
                 case 5 -> findPlanetary();
-                case 6 -> listByPlanetaryName();
+                case 6 -> clearPlanetaryObjects();
                 default -> System.out.println("Invalid option entered" + option);
             }
             ScannerInput.readNextLine("\n Press the enter key to continue");
@@ -155,12 +156,33 @@ public class Driver {
         }
     }
 
+    private void clearPlanetaryObjects() {
+        if (planetarySystemAPI.numberOfPlanetarySystems() == 0) {
+            System.out.println("No planetary systems to clear.");
+            return;
+        }
+
+        boolean clearFile = askYesNo("Do you also want to clear the file? (Yes = clear file, No = keep file)");
+
+        // Always clear the list
+        planetarySystemAPI.getPlanetarySystems().clear();
+        System.out.println("All Planetery systems cleared.");
+
+        if (clearFile) {
+            PlanetarySystemAPI.clearFile();
+            System.out.println("All backup data cleared.");
+        }
+    }
+
+
 
 
     private void deletePlanetary() {
+        System.out.println(planetarySystemAPI.listPlanetarySystems());
         String planetarysystemsName = ScannerInput.readNextLine("Please enter the planetary systems name: ");
         if (planetarySystemAPI.removePlanetarySystemByName(planetarysystemsName) != null) {
             System.out.println("Delete successful");
+            System.out.println(planetarySystemAPI.listPlanetarySystems());
         } else {
             System.out.println("Delete not successful");
         }
@@ -208,11 +230,7 @@ public class Driver {
         }
     }
 
-    private void listByPlanetaryName() {
-        String planetarysystems = ScannerInput.readNextLine("Enter the planetary systems's name:  ");
 
-        System.out.println(planetarySystemAPI.listAllByPlanetarySystemName(planetarysystems));
-    }
 
 
     //---------------------

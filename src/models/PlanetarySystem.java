@@ -106,4 +106,8 @@ public class PlanetarySystem {
                 ", Discovered: " + discovered +
                 ", System Type: " + systemType;
     }
+
+    public String getName() {
+        return systemName;
+    }
 }

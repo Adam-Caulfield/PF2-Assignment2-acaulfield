@@ -3,6 +3,7 @@ package controllers;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import models.CelestialBody;
 import models.PlanetarySystem;
 import utils.ISerializer;
 
@@ -15,9 +16,9 @@ import static utils.Utilities.isValidIndex;
 //todo include PlanetarySystem API into starter code
 public class PlanetarySystemAPI implements ISerializer {
 
-    private List<PlanetarySystem> planetarySystemList = new ArrayList<>();
+    private static List<PlanetarySystem> planetarySystemList = new ArrayList<>();
 
-    private File file;
+    private static File file;
 
     public PlanetarySystemAPI(File file)  {
         this.file = file;
@@ -158,6 +159,22 @@ public class PlanetarySystemAPI implements ISerializer {
         os.close();
     }
 
+    public static void clearFile() {
+        try {
+            // Clear the list first
+            planetarySystemList.clear();
+
+            // Overwrite the file with an empty list
+            var xstream = new XStream(new DomDriver());
+            ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter(file));
+            os.writeObject(planetarySystemList); // writes an empty list
+            os.close();
+
+            System.out.println("Planetary Systems cleared and file emptied.");
+        } catch (Exception e) {
+            System.err.println("Error clearing file: " + e.getMessage());
+        }
+    }
 
     public void load() throws Exception {
         //list of classes that you wish to include in the serialisation, separated by a comma
@@ -187,4 +204,16 @@ public class PlanetarySystemAPI implements ISerializer {
         }
         return sb.toString();
     }
+
+    public int numberOfPlanetarySystems() {
+        return planetarySystemList.size();
+    }
+
+    public PlanetarySystem getPlanetarySystem(int index) {
+        if (isValidIndex(planetarySystemList, index)) {
+            return planetarySystemList.get(index);
+        }
+        return null;
+    }
+
 }
