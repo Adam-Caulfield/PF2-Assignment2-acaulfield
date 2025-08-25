@@ -433,11 +433,11 @@ public class Driver {
 
     private PlanetarySystem askPlanetarySystem() {
         System.out.println(planetarySystemAPI.listPlanetarySystems());
-        int index = ScannerInput.readNextInt("Enter the index of the planetary system to add this celestial object to: ");
+        int index = ScannerInput.readNextInt("Enter the index of the planetary system: ");
         PlanetarySystem planetarySystem = planetarySystemAPI.getPlanetarySystemByIndex(index);
         System.out.println("you selected : "+planetarySystem);
         if (planetarySystem == null) {
-            System.out.println("Planetary system does not exist. Cannot add celestial object.");
+            System.out.println("Planetary system does not exist. Cannot find Planetary system.");
             return planetarySystem;
         }
         return planetarySystem;
@@ -591,7 +591,7 @@ public class Driver {
             switch (option) {
                 case 1 -> System.out.println(planetarySystemAPI.listPlanetarySystems());
                 case 2 -> listAllCelestialFromaGivenPlanetary();
-                case 3 ->  planetarySystemAPI.listPlanetarySystems();
+                case 3 ->  System.out.println(planetarySystemAPI.listPlanetarySystems());
                 default -> System.out.println("Invalid option entered" + option);
             }
             ScannerInput.readNextLine("\n Press the enter key to continue");

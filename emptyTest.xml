@@ -1,0 +1,10 @@
+<planetarySystems>
+    <planetarySystem>
+        <name>Solar System</name>
+        <planets>
+            <planet>
+                <name>Earth</name>
+            </planet>
+        </planets>
+    </planetarySystem>
+</planetarySystems>

@@ -6,6 +6,7 @@ import models.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CelestialSystemAPI {
     public static ArrayList<CelestialBody> allCelestialBodies = new ArrayList<>();
@@ -267,15 +268,26 @@ public class CelestialSystemAPI {
         return result.isEmpty() ? "No Stars with spectral type " + type : result;
     }
 
-    public boolean listAllCelestialObjectsSmallerThan(double diam) {
-        for (CelestialBody obj : allCelestialBodies) if (obj.getDiameter() < diam) return true;
-        return false;
+    public List<CelestialBody> listAllCelestialObjectsSmallerThan(double diam) {
+        List<CelestialBody> result = new ArrayList<>();
+        for (CelestialBody obj : allCelestialBodies) {
+            if (obj.getDiameter() < diam) {
+                result.add(obj);
+            }
+        }
+        return result;
     }
 
-    public boolean listAllCelestialObjectsHeavierThan(double w) {
-        for (CelestialBody obj : allCelestialBodies) if (obj.getWeight() > w) return true;
-        return false;
+    public List<CelestialBody> listAllCelestialObjectsHeavierThan(double weight) {
+        List<CelestialBody> result = new ArrayList<>();
+        for (CelestialBody obj : allCelestialBodies) {
+            if (obj.getWeight() > weight) {
+                result.add(obj);
+            }
+        }
+        return result;
     }
+
 
 
     public void load() throws Exception {
@@ -317,7 +329,12 @@ public class CelestialSystemAPI {
         out.close();
     }
 
-    public String listAllCelestialBodies() { if (allCelestialBodies.isEmpty()) return "No Celestial Bodies"; String result = ""; for (int i = 0; i < allCelestialBodies.size(); i++) result += i + ": " + allCelestialBodies.get(i) + "\n"; return result; }
+    public String listAllCelestialBodies() {
+        if (allCelestialBodies.isEmpty())
+            return "No Celestial Bodies";
+        String result = ""; for (int i = 0; i < allCelestialBodies.size(); i++)
+            result += i + ": " + allCelestialBodies.get(i) + "\n";
+        return result; }
 
     public void sortByMassDescending() {
         for (int i = allCelestialBodies.size() - 1; i >= 0; i--) {

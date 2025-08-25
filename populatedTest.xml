@@ -1,0 +1,28 @@
+<object-stream>
+    <list>
+        <models.PlanetarySystem>
+            <systemName>Solar System</systemName>
+            <orbittingStarName>Sun</orbittingStarName>
+            <age>4</age>
+            <habitable>true</habitable>
+            <discovered>2000</discovered>
+            <systemType>G-type</systemType>
+        </models.PlanetarySystem>
+        <models.PlanetarySystem>
+            <systemName>GE345</systemName>
+            <orbittingStarName>Sun12</orbittingStarName>
+            <age>2</age>
+            <habitable>false</habitable>
+            <discovered>2010</discovered>
+            <systemType>K-type</systemType>
+        </models.PlanetarySystem>
+        <models.PlanetarySystem>
+            <systemName>Generic_234</systemName>
+            <orbittingStarName>Star123</orbittingStarName>
+            <age>3</age>
+            <habitable>true</habitable>
+            <discovered>2005</discovered>
+            <systemType>M-type</systemType>
+        </models.PlanetarySystem>
+    </list>
+</object-stream>

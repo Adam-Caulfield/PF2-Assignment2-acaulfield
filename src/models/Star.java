@@ -27,14 +27,10 @@ public class Star extends StellarObject {
     @Override
     public String toString() {
         return "Star Details:\n" +
-                "Name: " + getName() + "\n" +
-                "Mass: " + getMass() + "\n" +
-                "Diameter: " + getDiameter() + "\n" +
-                "Gravity: " + calculateGravity() + "\n" +
-                "Spectral Type: " + getSpectralType() + "\n" +
-                "Luminosity: " + getLuminosity() + "\n" +
-                "Energy Source: " + getEnergySource() + "\n" +
-                "Planetary System: " + getPlanetarySystem().getSystemName()+ "\n"+
+                "Name: " + getName() + " "+ "Mass: " + getMass() + "\n" +
+                "Diameter: " + getDiameter() +" " + "Gravity: " + calculateGravity() + "\n" +
+                "Spectral Type: " + getSpectralType() +" " + "Luminosity: " + getLuminosity() + "\n" +
+                "Energy Source: " + getEnergySource() +" " + "Planetary System: " + getPlanetarySystem().getSystemName()+ "\n"+
                  "id: "+getId()+"\n";
     }
 }

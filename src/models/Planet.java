@@ -55,14 +55,10 @@ public abstract class Planet extends CelestialBody {
 
  public String toString() {
   return "Plannet Details:\n" +
-          "Name: " + getName() + "\n" +
-          "Mass: " + getMass() + "\n" +
-          "Diameter: " + getDiameter() + "\n" +
-          "Gravity: " + calculateGravity() + "\n" +
-          "has water: " + hasLiquidWater() + "\n" +
-          "Surface Type: " + getSurfaceType() + "\n" +
-          "Average Temperature: " + getAverageTemperature() + "\n" +
-          "Energy Source: " + getEnergySource() + "\n" +
+          "Name: " + getName() +" "+ "Mass: " +" "+ getMass() + "\n" +
+          "Diameter: " + getDiameter()+" "  + "Gravity: " + calculateGravity() + "\n" +
+          "has water: " + hasLiquidWater()+" " + "Surface Type: " + getSurfaceType() + "\n" +
+          "Average Temperature: " + getAverageTemperature()+" " + "Energy Source: " + getEnergySource() + "\n" +
           "Planetary System: " + getPlanetarySystem().getSystemName();
  }
 }
